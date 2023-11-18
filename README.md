@@ -1,5 +1,5 @@
 
-|![Icône de FreeCAD](https://github.com/AdrienHerman/PLP/blob/main/FreeCAD016-logo.svg) | ![Structure Générée](https://github.com/AdrienHerman/PLP/blob/main/image.png)|
+|![Icône de FreeCAD](https://github.com/AdrienHerman/PLP/blob/main/FreeCAD016-logo.svg =16x16) | ![Structure Générée](https://github.com/AdrienHerman/PLP/blob/main/image.png =16x)|
 
 # PLP23INT16 : Étude de la capacité d'absorption de diverses structures lattices hybrides à gradients de réseau
 
