@@ -1,0 +1,27 @@
+#:NE PAS EFFACER LES COMMENTAIRES
+#:Tous les paramètres doivent être séparés par : au début et à
+#:la fin de la chaîne de caractères sans espaces
+#:Le fichier de configuration config.txt ne doit pas être déplacé ou supprimé
+#:
+#:-----------------------------------
+#: --- PARTIE LECTURE DE DONNEES ---
+#: ** Superposer les courbes des données dans un même dossier ?
+#: ** True = Oui / False = Non
+#: ** Si cette option est à True, nom_dossier doit-être renseigné
+#: ** Sinon, nom_fichier doit-être renseigné
+superposer_courbes:False:
+nom_fichier:STRUCT_5_03.CSV:
+nom_dossier:DATA/6/:
+#:
+#: ** Calculer les données de temps de l'essai
+#: ** True = Oui / False = Non
+calc_temps:True:
+#:
+#: ** Enregistrer les données lues dans un fichier .txt
+#: ** Dans le cas de la lecture d'un dossier, les fichiers
+#: ** .txt auront les mêmes noms que les fichiers dans le dossier.
+#: ** Sinon vous pouvez renseigner le nom de fichier ci-dessous.
+#: ** ATTENTION : Ne pas mettre .txt à la fin du nom de fichier.
+enregistrer_donnees:True:
+nom_enregistrement:STRUCT_5_03:
+#:-----------------------------------
