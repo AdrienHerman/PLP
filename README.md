@@ -1,5 +1,5 @@
 
-|<img src="https://github.com/AdrienHerman/PLP/blob/main/FreeCAD016-logo.svg" width="128" height="128" />|<img src="https://github.com/AdrienHerman/PLP/blob/main/image.png" width="128" />|
+<table><tbody><td><img src="https://github.com/AdrienHerman/PLP/blob/main/FreeCAD016-logo.svg" width="128" height="128" /></td><td><img src="https://github.com/AdrienHerman/PLP/blob/main/image.png" width="128" /></td></tbody></table>
 
 # PLP23INT16 : Étude de la capacité d'absorption de diverses structures lattices hybrides à gradients de réseau
 
