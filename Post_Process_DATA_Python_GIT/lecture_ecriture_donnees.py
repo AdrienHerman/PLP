@@ -32,7 +32,7 @@ def lire_fichier_csv_oscilo(filePath=None):
 
 		return []
 
-def lire_fichier_csv_python(filePath=None):
+def lire_fichier_txt_python(filePath=None):
 	"""
 	Ouverture et lecture des données d'un fichier .txt provenant
 	du traitement des données faites sur Python.
@@ -195,7 +195,7 @@ def calc_temps_essai(dep=[], echantillonage=.0):
 
 		return tmps
 	else:
-		print("Les données de déplacement ou d'échantillonage sont inexistantes.\n     dep={0}\n     echantillonage={1}";format(dep, echantillonage))
+		print("Les données de déplacement ou d'échantillonage sont inexistantes.\n     dep={0}\n     echantillonage={1}".format(dep, echantillonage))
 
 		return []
 
