@@ -4,7 +4,11 @@ HERMAN Adrien
 21/11/2023
 """
 
-def graphe(data_x=[], data_y[], label_x="", label_y="", titre="", fileName="", couleurs=['b','g','r','c','m','y','k'], type_lignes=['-','--',':','-.']):
+# Modules de Python
+import matplotlib.pyplot as plt
+from matplotlib.ticker import MaxNLocator
+
+def graphe(data_x=[], data_y=[], label_x="", label_y="", titre="", fileName=[""], xlim_inf=False, xlim_sup=False, couleurs=['b','g','r','c','m','y','k'], type_lignes=['-','--',':','-.']):
 	"""
 	Affichage d'un graphe xy.
 
@@ -40,20 +44,18 @@ def graphe(data_x=[], data_y[], label_x="", label_y="", titre="", fileName="", c
 
 			return None
 
-		if type(fileName) == str and fileName != "":
-			ax.plot(data_x[i], data_y[i], couleurs[i % len(couleurs)] + type_lignes[(i // len(couleurs)) % len(type_lignes)], label=fileName[i])
-
-		elif type(fileName) == list:
+		if type(fileName) == list:
 			ax.plot(data_x[i], data_y[i], couleurs[i % len(couleurs)] + type_lignes[(i // len(couleurs)) % len(type_lignes)], label=fileName[i])
 
 		else:
-			print("Le nom de fichier est erronné !")
-
-			return None
+			print("Le type du nom de fichier est incorrect !\n     type(fileName)={0}\n     fileName={1}".format(type(fileName), fileName))
 
 	if (type(fileName) == str and fileName != "") or type(fileName) == list:
 		ax.legend()
 
 	plt.grid()
+
+	if xlim_inf != False or xlim_sup != False:
+		plt.xlim([xlim_inf, xlim_sup])
 
 	return plt

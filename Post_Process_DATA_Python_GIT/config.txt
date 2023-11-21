@@ -22,6 +22,7 @@ calc_temps:True:
 #: ** .txt auront les mêmes noms que les fichiers dans le dossier.
 #: ** Sinon vous pouvez renseigner le nom de fichier ci-dessous.
 #: ** ATTENTION : Ne pas mettre .txt à la fin du nom de fichier.
-enregistrer_donnees:True:
+enregistrer_data:True:
 nom_enregistrement:STRUCT_5_03:
+dossier_enregistrement:DATA/:
 #:-----------------------------------

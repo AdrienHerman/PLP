@@ -30,14 +30,28 @@ def suppr_rollback(F, dep, tmps=[]):
 
 	while True:
 		if i > len(dep) - 1:	break
+
 		if dep[i] > 0 and dep[i] > 0:
 			if dep[i] < dep[i - 1]:
-				if rollback_action == 0:
-					del dep[i]
-					del F[i]
+				del dep[i]
+				del F[i]
+				if tmps != []:	del tmps[i]
+
 			else:
 				i += 1
 		else:
 			i += 1
 
 	return F, dep, tmps
+
+def suppr_saut_force(F):
+	"""
+	Supprimer les instabilités de mesure de la force.
+
+	-----------
+	Variables :
+		- F : Vecteur force
+	-----------
+	"""
+	
+	pass

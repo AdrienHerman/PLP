@@ -245,7 +245,7 @@ def enregistrer_donnees(F=[], dep=[], tmps=[], calc_temps=True, filePath="", uni
 
 		return False
 
-	if len(F) != len(dep) or len(dep) != len(tmp):
+	if len(F) != len(dep) or len(dep) != len(tmps):
 		print("Les vecteurs de données doivent avoir la même longueur.\n     len(F)={0}\n     len(dep)={1}\n     len(tmps)={2}".format(len(F), len(dep), len(tmps)))
 
 		return False
