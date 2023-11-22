@@ -430,8 +430,8 @@ if __name__ == "__main__":
 	nom_sketch_losange = "Sketch_Losange"
 	nom_body_losange = "Body_Losange"
 	nom_pad_losange = "Pad_Losange"
-	nom_sketch_plateaux="Sketch_Plateaux"
-	nom_pad_plateaux="Pad_Plateaux"
+	nom_sketch_plateaux = "Sketch_Plateaux"
+	nom_pad_plateaux = "Pad_Plateaux"
 	doc = FreeCAD.newDocument()
 
 	# Volume maximal calculé
