@@ -20,12 +20,12 @@ def suppr_rollback(F=[], dep=[], tmps=[]):
 	"""
 
 	if type(F) != list or type(dep) != list or type(tmps) != list:
-		print("Les types des arguments ne sont pas correctes.\n     type(F)={0}\n     type(dep)={1}\n     type(tmps)={2}".format(type(F), type(dep), type(tmps)))
+		print("suppr_rollback\nLes types des arguments ne sont pas correctes.\n     type(F)={0}\n     type(dep)={1}\n     type(tmps)={2}".format(type(F), type(dep), type(tmps)))
 
 		return [], [], []
 
 	if len(F) == 0 and (len(F) != len(dep) or len(dep) != len(tmps)):
-		print("Les vecteurs d'entrée doivent-être de même longueur et non vides !")
+		print("suppr_rollback\nLes vecteurs d'entrée doivent-être de même longueur et non vides !")
 
 		return [], [], []
 
@@ -79,22 +79,22 @@ def recherche_debut_impact(F=[], dep=[], tmps=[], taux_agmentation=0.3, nb_pas_a
 	"""
 
 	if type(F) != list or type(dep) != list or type(tmps) != list or type(taux_agmentation) != float or type(nb_pas_avant_agmentation) != int or type(fileName) != str:
-		print("Les types des arguments ne sont pas correctes.\n     type(F)={0}\n     type(dep)={1}\n     type(tmps)={2}\n     type(taux_agmentation)={3}\n     type(nb_pas_avant_agmentation)={4}\n     type(fileName)={5}\n".format(type(F), type(dep), type(tmps), type(taux_agmentation), type(nb_pas_avant_agmentation), type(fileName)))
+		print("recherche_debut_impact\nLes types des arguments ne sont pas correctes.\n     type(F)={0}\n     type(dep)={1}\n     type(tmps)={2}\n     type(taux_agmentation)={3}\n     type(nb_pas_avant_agmentation)={4}\n     type(fileName)={5}\n".format(type(F), type(dep), type(tmps), type(taux_agmentation), type(nb_pas_avant_agmentation), type(fileName)))
 
 		return [], [], []
 
 	if len(F) == 0 and (len(F) != len(dep) or len(dep) != len(tmps)):
-		print("Les vecteurs d'entrée doivent-être de même longueur et non vides !")
+		print("recherche_debut_impact\nLes vecteurs d'entrée doivent-être de même longueur et non vides !")
 
 		return [], [], []
 
 	if taux_agmentation <= 0:
-		print("Le taux d'augmentation doit être positif strict !")
+		print("recherche_debut_impact\nLe taux d'augmentation doit être positif strict !")
 
 		return F, dep, tmps
 
 	if nb_pas_avant_agmentation < 0:
-		print("Le nombre de pas avant augmentation doit être supérieur ou égal à 0 !")
+		print("recherche_debut_impact\nLe nombre de pas avant augmentation doit être supérieur ou égal à 0 !")
 
 		return F, dep, tmps
 
@@ -118,7 +118,7 @@ def recherche_debut_impact(F=[], dep=[], tmps=[], taux_agmentation=0.3, nb_pas_a
 		return F, dep, tmps
 
 	else:
-		print("!!! ERREUR : Début de l'impact non trouvé {0} !!!".format(fileName))
+		print("recherche_debut_impact\n!!! ERREUR : Début de l'impact non trouvé {0} !!!".format(fileName))
 
 		return F, dep, tmps
 
@@ -135,12 +135,12 @@ def energie(F=[], dep=[]):
 	"""
 
 	if type(F) != list or type(dep) != list:
-		print("Les types des arguments ne sont pas correctes.\n     type(F)={0}\n     type(dep)={1}".format(type(F), type(dep)))
+		print("energie\nLes types des arguments ne sont pas correctes.\n     type(F)={0}\n     type(dep)={1}".format(type(F), type(dep)))
 
 		return [], []
 
 	if len(F) == 0 and len(F) != len(dep):
-		print("Les vecteurs d'entrée doivent-être de même longueur et non vides !")
+		print("energie\nLes vecteurs d'entrée doivent-être de même longueur et non vides !")
 
 		return F, dep
 
@@ -161,12 +161,12 @@ def tare_dep(dep=[]):
 	"""
 
 	if type(dep) != list:
-		print("Les types des arguments ne sont pas correctes.\n     type(dep)={1}".format(type(dep)))
+		print("tare_dep\nLes types des arguments ne sont pas correctes.\n     type(dep)={1}".format(type(dep)))
 
 		return []
 
 	if len(dep) == 0:
-		print("Le vecteur d'entrée doit-être non vide !")
+		print("tare_dep\nLe vecteur d'entrée doit-être non vide !")
 
 		return dep
 
@@ -189,12 +189,12 @@ def tare_tmps(tmps=[]):
 	"""
 
 	if type(tmps) != list:
-		print("Les types des arguments ne sont pas correctes.\n     type(tmps)={1}".format(type(tmps)))
+		print("tare_tmps\nLes types des arguments ne sont pas correctes.\n     type(tmps)={1}".format(type(tmps)))
 
 		return []
 
 	if len(tmps) == 0:
-		print("Le vecteur d'entrée doit-être non vide !")
+		print("tare_tmps\nLe vecteur d'entrée doit-être non vide !")
 
 		return tmps
 
@@ -223,12 +223,12 @@ def fin_essai(F=[], dep=[], tmps=[], dep_max=19.0):
 	"""
 
 	if type(F) != list or type(dep) != list or type(tmps) != list or type(dep_max) != float:
-		print("Les types des arguments ne sont pas correctes.\n     type(F)={0}\n     type(dep)={1}\n     type(tmps)={2}\n     type(dep_max)={3}".format(type(F), type(dep), type(tmps), type(dep_max)))
+		print("fin_essai\nLes types des arguments ne sont pas correctes.\n     type(F)={0}\n     type(dep)={1}\n     type(tmps)={2}\n     type(dep_max)={3}".format(type(F), type(dep), type(tmps), type(dep_max)))
 
 		return [], [], []
 
 	if len(F) == 0 and (len(F) != len(dep) or len(dep) != len(tmps)):
-		print("Les vecteurs d'entrée doivent-être de même longueur et non vides !")
+		print("fin_essai\nLes vecteurs d'entrée doivent-être de même longueur et non vides !")
 
 		return [], [], []
 

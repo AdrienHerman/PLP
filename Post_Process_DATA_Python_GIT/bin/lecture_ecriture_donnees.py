@@ -5,6 +5,9 @@ HERMAN Adrien
 18/11/2023
 """
 
+# Modules de Python
+import os
+
 def lire_fichier_csv_oscilo(filePath=None):
 	"""
 	Ouverture et lecture des données d'un fichier .csv provenant
@@ -18,6 +21,16 @@ def lire_fichier_csv_oscilo(filePath=None):
 	-----------
 	"""
 
+	# Récupération du dossier contenant le fichier
+	path = filePath.split("/")
+	del path[len(path) - 1]
+	path = '/'.join(path)
+
+	if not (filePath.split("/")[len(filePath.split("/")) - 1] in os.listdir(path)):
+		print("lire_fichier_csv_oscilo\nLe fichier a ouvrir n'existe pas !\n     filePath={0}".format(filePath))
+
+		return []
+
 	try:
 		file = open(filePath, "r")
 		lignes = file.readlines()
@@ -28,7 +41,7 @@ def lire_fichier_csv_oscilo(filePath=None):
 
 		return lignes
 	except:
-		print("Impossible de lire le fichier :\n     filePath={0}".format(filePath))
+		print("lire_fichier_csv_oscilo\nImpossible de lire le fichier :\n     filePath={0}".format(filePath))
 
 		return []
 
@@ -66,7 +79,7 @@ def lire_fichier_txt_python(filePath=None):
 				return F, dep, tmps, lignes[0], lignes[1], lignes[2]
 
 			except:
-				print("Le fichier n'a pas une mise en forme correcte ou ses données ne sont pas au bon format")
+				print("lire_fichier_txt_python\nLe fichier n'a pas une mise en forme correcte ou ses données ne sont pas au bon format")
 
 				return [], [], [], "", "", .0
 		else:					# Les données de temps ne sont pas enregistrées
@@ -78,11 +91,11 @@ def lire_fichier_txt_python(filePath=None):
 				return F, dep, [], lignes[0], lignes[1], lignes[2]
 
 			except:
-				print("Le fichier n'a pas une mise en forme correcte ou ses données ne sont pas au bon format")
+				print("lire_fichier_txt_python\nLe fichier n'a pas une mise en forme correcte ou ses données ne sont pas au bon format")
 
 				return [], [], [], "", "", .0
 	except:
-		print("Impossible de lire le fichier :\n     filePath={0}".format(filePath))
+		print("lire_fichier_txt_python\nImpossible de lire le fichier :\n     filePath={0}".format(filePath))
 
 		return []
 
@@ -132,7 +145,7 @@ def lire_en_tete_csv_oscilo(lignes=[]):
 
 		return unite_F, unite_dep, echantillonage, date, heure
 	else:
-		print("La variable contenant les données du fichier .csv est vide ou du mauvais type\n     lignes={0}".format(lignes))
+		print("lire_en_tete_csv_oscilo\nLa variable contenant les données du fichier .csv est vide ou du mauvais type\n     lignes={0}".format(lignes))
 
 		return "", "", .0, "", ""
 
@@ -161,11 +174,11 @@ def lire_contenu_csv_oscillo(lignes=[]):
 			return F, dep
 
 		except:
-				print("Le fichier n'a pas une mise en forme correcte ou ses données ne sont pas au bon format")
+				print("lire_contenu_csv_oscillo\nLe fichier n'a pas une mise en forme correcte ou ses données ne sont pas au bon format")
 
 				return [], []
 	else:
-		print("La variable contenant les données du fichier .csv est vide ou du mauvais type\n     lignes={0}".format(lignes))
+		print("lire_contenu_csv_oscillo\nLa variable contenant les données du fichier .csv est vide ou du mauvais type\n     lignes={0}".format(lignes))
 
 		return [], []
 
@@ -183,7 +196,7 @@ def calc_temps_essai(dep=[], echantillonage=.0):
 	"""
 
 	if type(dep) != list or type(echantillonage) != float:
-		print("Les types des arguments ne sont pas correctes.\n     type(dep)={0}\n     type(echantillonage)={1}".format(type(dep), type(echantillonage)))
+		print("calc_temps_essai\nLes types des arguments ne sont pas correctes.\n     type(dep)={0}\n     type(echantillonage)={1}".format(type(dep), type(echantillonage)))
 
 		return []
 
@@ -195,7 +208,7 @@ def calc_temps_essai(dep=[], echantillonage=.0):
 
 		return tmps
 	else:
-		print("Les données de déplacement ou d'échantillonage sont inexistantes.\n     dep={0}\n     echantillonage={1}".format(dep, echantillonage))
+		print("calc_temps_essai\nLes données de déplacement ou d'échantillonage sont inexistantes.\n     dep={0}\n     echantillonage={1}".format(dep, echantillonage))
 
 		return []
 
@@ -222,7 +235,7 @@ def enregistrer_donnees(F=[], dep=[], tmps=[], calc_temps=True, filePath="", uni
 	string_file = date + "\n" + heure + "\n" + str(echantillonage) + "\n"
 
 	if type(dep) != list or type(F) != list or type(tmps) != list or type(calc_temps) != bool or type(filePath) != str or type(unite_F) != str or type(unite_dep) != str or type(echantillonage) != float or type(date) != str or type(heure) != str:
-		print("""Les types des arguments ne sont pas correctes.\n
+		print("""enregistrer_donnees\nLes types des arguments ne sont pas correctes.\n
 				     type(dep)={0}\n
 				     type(echantillonage)={1}\n
 				     type(tmps)={2}\n
@@ -246,7 +259,7 @@ def enregistrer_donnees(F=[], dep=[], tmps=[], calc_temps=True, filePath="", uni
 		return False
 
 	if len(F) != len(dep) or len(dep) != len(tmps):
-		print("Les vecteurs de données doivent avoir la même longueur.\n     len(F)={0}\n     len(dep)={1}\n     len(tmps)={2}".format(len(F), len(dep), len(tmps)))
+		print("enregistrer_donnees\nLes vecteurs de données doivent avoir la même longueur.\n     len(F)={0}\n     len(dep)={1}\n     len(tmps)={2}".format(len(F), len(dep), len(tmps)))
 
 		return False
 
@@ -258,7 +271,7 @@ def enregistrer_donnees(F=[], dep=[], tmps=[], calc_temps=True, filePath="", uni
 				for i in range(len(F)):
 					string_file += str(F[i]) + "," + str(dep[i]) + "," + str(tmps[i]) + "\n"
 			else:
-				print("Le vecteur temps est vide.\n     tmps={0}".format(tmps))
+				print("enregistrer_donnees\nLe vecteur temps est vide.\n     tmps={0}".format(tmps))
 
 				return False
 
@@ -273,12 +286,63 @@ def enregistrer_donnees(F=[], dep=[], tmps=[], calc_temps=True, filePath="", uni
 			file.write(string_file)
 			file.close()
 		except:
-			print("L'enregistrement du fichier à échoué. Le chemin est peut-être incorrect.\n     filePath={0}".format(filePath))
+			print("enregistrer_donnees\nL'enregistrement du fichier à échoué. Le chemin est peut-être incorrect.\n     filePath={0}".format(filePath))
 
 			return False
 
 		return True
 	else:
-		print("Les vecteurs force et/ou déplacement sont vides.\n     F={0}\n     dep={1}".format(F, dep))
+		print("enregistrer_donnees\nLes vecteurs force et/ou déplacement sont vides.\n     F={0}\n     dep={1}".format(F, dep))
 
 		return False
+
+def liste_fichier_dossier(path="", fileType=".csv"):
+	"""
+	Lister les fichiers d'un dossier portant une extension particulière.
+
+	-----------
+	Variables :
+		- path : Dossier où on doit lister les fichiers
+		- fileType : Type de fichier à rechercher (* pour tout rechercher)
+	-----------
+	"""
+
+	if type(path) != str or type(fileType) != str:
+		print("liste_fichier_dossier\nLes types d'entrée ne sont pas corrects !\n     type(path)={0}\n     type(fileType)={1}".format(type(path), type(filePath)))
+
+		return []
+
+	if not "." in fileType and fileType != "*":
+		print("liste_fichier_dossier\nLe format de fichier n'est pas correct !\n     fileType={0}".format(fileType))
+
+		return []
+
+	if fileType == "*":
+		try:
+			files = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
+
+		except:
+			print("liste_fichier_dossier\nLe dossier de recherche n'est pas correct !\n     path={0}".format(path))
+
+			return []
+
+	else:
+		try:
+			files = os.listdir(path)
+
+		except:
+			print("liste_fichier_dossier\nLe dossier de recherche n'est pas correct !\n     path={0}".format(path))
+
+			return []
+
+		fileType = fileType.lower()
+		j = 0
+
+		for i in range(len(files)):
+			if not fileType in files[j].lower():
+				del files[j]
+
+			else:
+				j += 1
+
+	return files

@@ -9,8 +9,8 @@
 #: ** True = Oui / False = Non
 #: ** Si cette option est à True, nom_dossier doit-être renseigné
 #: ** Sinon, nom_fichier doit-être renseigné
-superposer_courbes:False:
-nom_fichier:DATA/STRUCT_5_01.CSV:
+superposer_courbes:True:
+nom_fichier:DATA/STRUCT_1_01.CSV:
 nom_dossier:DATA/6/:
 #:
 #: ** Calculer les données de temps de l'essai

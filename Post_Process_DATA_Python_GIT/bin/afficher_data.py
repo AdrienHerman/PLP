@@ -25,7 +25,7 @@ def graphe(data_x=[], data_y=[], label_x="", label_y="", titre="", fileName=[""]
 	if fig == None and ax == None:
 		fig, ax = plt.subplots()
 	elif fig == None or ax == None:
-		print("Les objets contenant les données du graphique ne sont pas corrects")
+		print("graphe\nLes objets contenant les données du graphique ne sont pas corrects")
 
 	ax.set_title(titre)
 	ax.set_xlabel(label_x)
@@ -33,7 +33,7 @@ def graphe(data_x=[], data_y=[], label_x="", label_y="", titre="", fileName=[""]
 	ax.set_ylabel(label_y)
 
 	if type(data_x) != list or type(data_y) != list:
-		print("Les types des arguments ne sont pas correctes.\n     type(data_x)={0}\n     type(data_y)={1}".format(type(data_x), type(data_y)))
+		print("graphe\nLes types des arguments ne sont pas correctes.\n     type(data_x)={0}\n     type(data_y)={1}".format(type(data_x), type(data_y)))
 
 		return None
 
@@ -44,7 +44,7 @@ def graphe(data_x=[], data_y=[], label_x="", label_y="", titre="", fileName=[""]
 
 	for i in range(len(data_y)):
 		if len(data_x[i]) != len(data_y[i]) and len(data_x[i]) != 0:
-			print("Les vecteurs de données doivent-être de même longueur et non vides.\n     len(data_x)={0}\n     len(data_y)={1}".format(len(data_x), len(data_y)))
+			print("graphe\nLes vecteurs de données doivent-être de même longueur et non vides.\n     len(data_x)={0}\n     len(data_y)={1}".format(len(data_x), len(data_y)))
 
 			return None
 
@@ -52,7 +52,7 @@ def graphe(data_x=[], data_y=[], label_x="", label_y="", titre="", fileName=[""]
 			ax.plot(data_x[i], data_y[i], couleurs[i % len(couleurs)] + type_lignes[(i // len(couleurs)) % len(type_lignes)], label=fileName[i])
 
 		else:
-			print("Le type du nom de fichier est incorrect !\n     type(fileName)={0}\n     fileName={1}".format(type(fileName), fileName))
+			print("graphe\nLe type du nom de fichier est incorrect !\n     type(fileName)={0}\n     fileName={1}".format(type(fileName), fileName))
 
 	if (type(fileName) == str and fileName != "") or type(fileName) == list:
 		ax.legend()
