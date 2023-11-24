@@ -34,7 +34,7 @@ def suppr_rollback(F=[], dep=[], tmps=[]):
 	while True:
 		if i > len(dep) - 1:	break
 
-		if dep[i] > 0 and dep[i] > 0:
+		if dep[i] >= 0:
 			if dep[i] < dep[i - 1]:
 				del dep[i]
 				del F[i]
@@ -43,8 +43,14 @@ def suppr_rollback(F=[], dep=[], tmps=[]):
 			else:
 				i += 1
 		else:
-			i += 1
+			if dep[i] > dep[i - 1]:
+				del dep[i]
+				del F[i]
+				if tmps != []:	del tmps[i]
 
+			else:
+				i += 1
+		
 	return F, dep, tmps
 
 def suppr_saut_force(F, taux_variation=0.05):
@@ -246,3 +252,38 @@ def fin_essai(F=[], dep=[], tmps=[], dep_max=19.0):
 	if tmps != []:	del tmps[i:]
 
 	return F, dep, tmps, impact
+
+def suppr_neg(F=[], dep=[], tmps=[]):
+	"""
+	Suppression des valeurs négatives du vecteur déplacement.
+
+	-----------
+	Variables :
+		- F : Vecteur force
+		- dep : Vecteur déplacement
+		- tmps : Vecteur temps (ms)
+	-----------
+	"""
+
+	if type(F) != list or type(dep) != list or type(tmps) != list:
+		print("suppr_neg\nLes types des arguments ne sont pas correctes.\n     type(F)={0}\n     type(dep)={1}\n     type(tmps)={2}".format(type(F), type(dep), type(tmps)))
+
+		return [], [], []
+
+	if len(F) == 0 and (len(F) != len(dep) or len(dep) != len(tmps)):
+		print("suppr_neg\nLes vecteurs d'entrée doivent-être de même longueur et non vides !")
+
+		return [], [], []
+
+	i = 0
+
+	while i < len(dep):
+		if dep[i] < 0:
+			del F[i]
+			del dep[i]
+			if tmps != []:	del tmps[i]
+
+		else:
+			i += 1
+
+	return F, dep, tmps

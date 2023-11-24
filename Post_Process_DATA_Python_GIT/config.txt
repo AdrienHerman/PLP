@@ -2,6 +2,7 @@
 #:Tous les paramètres doivent être séparés par : au début et à
 #:la fin de la chaîne de caractères sans espaces
 #:Le fichier de configuration config.txt ne doit pas être déplacé ou supprimé
+#:Les noms de variables ne doivent pas être modifiés.
 #:
 #:-----------------------------------
 #: --- PARTIE LECTURE DE DONNEES ---
@@ -10,8 +11,8 @@
 #: ** Si cette option est à True, nom_dossier doit-être renseigné
 #: ** Sinon, nom_fichier doit-être renseigné
 superposer_courbes:True:
-nom_fichier:DATA/STRUCT_1_01.CSV:
-nom_dossier:DATA/6/:
+nom_fichier:DATA/STRUCT_1_02.CSV:
+nom_dossier:DATA/5/:
 #:
 #: ** Calculer les données de temps de l'essai
 #: ** True = Oui / False = Non
@@ -22,7 +23,30 @@ calc_temps:True:
 #: ** .txt auront les mêmes noms que les fichiers dans le dossier.
 #: ** Sinon vous pouvez renseigner le nom de fichier ci-dessous.
 #: ** ATTENTION : Ne pas mettre .txt à la fin du nom de fichier.
-enregistrer_data:True:
+enregistrer_data:False:
 nom_enregistrement:STRUCT_5_03:
-dossier_enregistrement:DATA/:
+dossier_enregistrement:DATA/1/:
 #:-----------------------------------
+#:
+#:---------------------------------------
+#: --- PARTIE TRAITEMENT DES DONNEES ---
+#: ** Suppression des données comportant un retour en arrière
+#: ** du déplacement. Cette fonctionnalité permet d'éliminer
+#: ** les boucles de retour en arrière sur les courbes
+#: ** Force = f(Déplacement)
+#: ** True = Suppression activée / False = Suppression désactivée
+sppr_rollback:True:
+#:
+#: **
+recherche_deb_impact:True:
+#:
+#: **
+tarrage_dep:True:
+tarrage_tmps:True:
+#:
+#: **
+detect_fin_essai:True:
+#:
+#: **
+calculer_energie:True:
+#:---------------------------------------

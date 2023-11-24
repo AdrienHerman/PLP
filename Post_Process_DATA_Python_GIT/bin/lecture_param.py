@@ -41,6 +41,8 @@ def lecture_param(path_config="config.txt"):
 	enregistrer_data = None
 	nom_enregistrement = None
 	dossier_enregistrement = None
+	sppr_rollback = None
+	recherche_deb_impact = None
 
 	# Stockage des données
 	file = open(path_config, "r")
@@ -75,6 +77,30 @@ def lecture_param(path_config="config.txt"):
 			nom_enregistrement = lignes[i][1]
 		elif lignes[i][0] == "dossier_enregistrement":
 			dossier_enregistrement = lignes[i][1]
+		elif lignes[i][0] == "sppr_rollback":
+			if lignes[i][1] == "False":		sppr_rollback = False
+			elif lignes[i][1] == "True":	sppr_rollback = True
+			else:	print("lecture_param\nCommande inconnue pour sppr_rollback")
+		elif lignes[i][0] == "recherche_deb_impact":
+			if lignes[i][1] == "False":		recherche_deb_impact = False
+			elif lignes[i][1] == "True":	recherche_deb_impact = True
+			else:	print("lecture_param\nCommande inconnue pour recherche_deb_impact")
+		elif lignes[i][0] == "tarrage_dep":
+			if lignes[i][1] == "False":		tarrage_dep = False
+			elif lignes[i][1] == "True":	tarrage_dep = True
+			else:	print("lecture_param\nCommande inconnue pour tarrage_dep")
+		elif lignes[i][0] == "tarrage_tmps":
+			if lignes[i][1] == "False":		tarrage_tmps = False
+			elif lignes[i][1] == "True":	tarrage_tmps = True
+			else:	print("lecture_param\nCommande inconnue pour tarrage_tmps")
+		elif lignes[i][0] == "detect_fin_essai":
+			if lignes[i][1] == "False":		detect_fin_essai = False
+			elif lignes[i][1] == "True":	detect_fin_essai = True
+			else:	print("lecture_param\nCommande inconnue pour detect_fin_essai")
+		elif lignes[i][0] == "calculer_energie":
+			if lignes[i][1] == "False":		calculer_energie = False
+			elif lignes[i][1] == "True":	calculer_energie = True
+			else:	print("lecture_param\nCommande inconnue pour calculer_energie")
 
 	if superposer_courbes == None:
 		print("lecture_param\nsuperposer_courbes est non défini")
@@ -90,6 +116,18 @@ def lecture_param(path_config="config.txt"):
 		print("lecture_param\nnom_enregistrement est non défini")
 	elif dossier_enregistrement == None:
 		print("lecture_param\ndossier_enregistrement est non défini")
+	elif sppr_rollback == None:
+		print("lecture_param\nsppr_rollback est non défini")
+	elif recherche_deb_impact == None:
+		print("lecture_param\nrecherche_deb_impact est non défini")
+	elif tarrage_dep == None:
+		print("lecture_param\ntarrage_dep est non défini")
+	elif tarrage_tmps == None:
+		print("lecture_param\ntarrage_tmps est non défini")
+	elif detect_fin_essai == None:
+		print("lecture_param\ndetect_fin_essai est non défini")
+	elif calculer_energie == None:
+		print("lecture_param\ncalculer_energie est non défini")
 
 	return 	[superposer_courbes,
 			nom_fichier,
@@ -97,4 +135,10 @@ def lecture_param(path_config="config.txt"):
 			calc_temps,
 			enregistrer_data,
 			nom_enregistrement,
-			dossier_enregistrement]
+			dossier_enregistrement,
+			sppr_rollback,
+			recherche_deb_impact,
+			tarrage_dep,
+			tarrage_tmps,
+			detect_fin_essai,
+			calculer_energie]
