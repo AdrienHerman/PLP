@@ -8,7 +8,20 @@ HERMAN Adrien
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MaxNLocator
 
-def graphe(data_x=[], data_y=[], label_x="", label_y="", titre="", fileName=[""], xlim_inf=False, xlim_sup=False, ylim_inf=False, ylim_sup=False, fig=None, ax=None, couleurs=['b','g','r','c','m','y','k'], type_lignes=['-','--',':','-.']):
+def graphe(	data_x=[],
+			data_y=[],
+			label_x="",
+			label_y="",
+			titre="",
+			fileName=[""],
+			xlim_inf=False,
+			xlim_sup=False,
+			ylim_inf=False,
+			ylim_sup=False,
+			fig=None,
+			ax=None,
+			couleurs=['b','g','r','c','m','y','k'],
+			type_lignes=['-','--',':','-.']):
 	"""
 	Affichage d'un graphe xy.
 

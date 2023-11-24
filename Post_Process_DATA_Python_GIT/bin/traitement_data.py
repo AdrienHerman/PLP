@@ -68,7 +68,7 @@ def suppr_saut_force(F, taux_variation=0.05):
 	
 	pass
 
-def recherche_debut_impact(F=[], dep=[], tmps=[], taux_agmentation=0.3, nb_pas_avant_agmentation=1, fileName=""):
+def recherche_debut_impact(F=[], dep=[], tmps=[], taux_augmentation=0.3, nb_pas_avant_augmentation=1, fileName=""):
 	"""
 	Recherche du début de l'impact
 
@@ -78,14 +78,25 @@ def recherche_debut_impact(F=[], dep=[], tmps=[], taux_agmentation=0.3, nb_pas_a
 		- dep : Vecteur déplacement
 		- tmps : Vecteur temps (ms)
 		- taux_aumentation : 	Critère d'augmentation entre chaque pas pour détecter l'impact
-								pas(i) >= pas(i-1) * (1 + taux_agmentation) => Impact
-		- nb_pas_avant_agmentation : Nombre de pas retenus avant l'impact
+								pas(i) >= pas(i-1) * (1 + taux_augmentation) => Impact
+		- nb_pas_avant_augmentation : Nombre de pas retenus avant l'impact
 		- fileName : Nom du fichier étudié (permet d'afficher sur quel fichier l'impact n'a pas été trouvé)
 	-----------
 	"""
 
-	if type(F) != list or type(dep) != list or type(tmps) != list or type(taux_agmentation) != float or type(nb_pas_avant_agmentation) != int or type(fileName) != str:
-		print("recherche_debut_impact\nLes types des arguments ne sont pas correctes.\n     type(F)={0}\n     type(dep)={1}\n     type(tmps)={2}\n     type(taux_agmentation)={3}\n     type(nb_pas_avant_agmentation)={4}\n     type(fileName)={5}\n".format(type(F), type(dep), type(tmps), type(taux_agmentation), type(nb_pas_avant_agmentation), type(fileName)))
+	if type(F) != list or type(dep) != list or type(tmps) != list or type(taux_augmentation) != float or type(nb_pas_avant_augmentation) != int or type(fileName) != str:
+		print("""	recherche_debut_impact\nLes types des arguments ne sont pas correctes.\n
+					     type(F)={0}\n
+					     type(dep)={1}\n
+					     type(tmps)={2}\n
+					     type(taux_augmentation)={3}\n
+					     type(nb_pas_avant_augmentation)={4}\n
+					     type(fileName)={5}\n""".format(	type(F),
+					     									type(dep),
+					     									type(tmps),
+					     									type(taux_augmentation),
+					     									type(nb_pas_avant_augmentation),
+					     									type(fileName)))
 
 		return [], [], []
 
@@ -94,12 +105,12 @@ def recherche_debut_impact(F=[], dep=[], tmps=[], taux_agmentation=0.3, nb_pas_a
 
 		return [], [], []
 
-	if taux_agmentation <= 0:
+	if taux_augmentation <= 0:
 		print("recherche_debut_impact\nLe taux d'augmentation doit être positif strict !")
 
 		return F, dep, tmps
 
-	if nb_pas_avant_agmentation < 0:
+	if nb_pas_avant_augmentation < 0:
 		print("recherche_debut_impact\nLe nombre de pas avant augmentation doit être supérieur ou égal à 0 !")
 
 		return F, dep, tmps
@@ -109,17 +120,17 @@ def recherche_debut_impact(F=[], dep=[], tmps=[], taux_agmentation=0.3, nb_pas_a
 
 	for i in range(len(F)):
 		# Critère d'arrêt
-		if F[i] > max_F * (1 + taux_agmentation) and i > 10:	break
+		if F[i] > max_F * (1 + taux_augmentation) and i > 10:	break
 
 		# Stockage d'un élément supérieur au max déjà trouvé
 		if F[i] > max_F:
 			max_F = F[i]
 
-	if i < len(F) and i - nb_pas_avant_agmentation > 0:
+	if i < len(F) and i - nb_pas_avant_augmentation > 0:
 		# Suppression des données avant impact
-		del F[0 : i - nb_pas_avant_agmentation]
-		del dep[0 : i - nb_pas_avant_agmentation]
-		del tmps[0 : i - nb_pas_avant_agmentation]
+		del F[0 : i - nb_pas_avant_augmentation]
+		del dep[0 : i - nb_pas_avant_augmentation]
+		del tmps[0 : i - nb_pas_avant_augmentation]
 
 		return F, dep, tmps
 
@@ -128,7 +139,7 @@ def recherche_debut_impact(F=[], dep=[], tmps=[], taux_agmentation=0.3, nb_pas_a
 
 		return F, dep, tmps
 
-def energie(F=[], dep=[]):
+def energie(F=[], dep=[], fact_force=1, fact_dep=1e-3):
 	"""
 	Calcul de l'énergie d'impacten Joules en fonction de la force
 	en Newton et du déplacment en milimètres.
@@ -137,6 +148,8 @@ def energie(F=[], dep=[]):
 	Variables :
 		- F : Vecteur force
 		- dep : Vecteur déplacement
+		- fact_force : Facteur multiplicateur du vecteur force (permet le changement d'unité)
+		- fact_dep : Facteur multiplicateur du vecteur déplacement (permet le changement d'unité)
 	-----------
 	"""
 
@@ -150,10 +163,13 @@ def energie(F=[], dep=[]):
 
 		return F, dep
 
+	F_corrige = F.copy()
+	for i in range(len(F_corrige)):	F_corrige[i] *= fact_force
+
 	dep_corrige = dep.copy()
-	for i in range(len(dep_corrige)):	dep_corrige[i] *= 1e-3
+	for i in range(len(dep_corrige)):	dep_corrige[i] *= fact_dep
 	
-	return scipy.integrate.simps(F, dep_corrige)
+	return scipy.integrate.simps(F_corrige, dep_corrige)
 
 def tare_dep(dep=[]):
 	"""
@@ -252,38 +268,3 @@ def fin_essai(F=[], dep=[], tmps=[], dep_max=19.0):
 	if tmps != []:	del tmps[i:]
 
 	return F, dep, tmps, impact
-
-def suppr_neg(F=[], dep=[], tmps=[]):
-	"""
-	Suppression des valeurs négatives du vecteur déplacement.
-
-	-----------
-	Variables :
-		- F : Vecteur force
-		- dep : Vecteur déplacement
-		- tmps : Vecteur temps (ms)
-	-----------
-	"""
-
-	if type(F) != list or type(dep) != list or type(tmps) != list:
-		print("suppr_neg\nLes types des arguments ne sont pas correctes.\n     type(F)={0}\n     type(dep)={1}\n     type(tmps)={2}".format(type(F), type(dep), type(tmps)))
-
-		return [], [], []
-
-	if len(F) == 0 and (len(F) != len(dep) or len(dep) != len(tmps)):
-		print("suppr_neg\nLes vecteurs d'entrée doivent-être de même longueur et non vides !")
-
-		return [], [], []
-
-	i = 0
-
-	while i < len(dep):
-		if dep[i] < 0:
-			del F[i]
-			del dep[i]
-			if tmps != []:	del tmps[i]
-
-		else:
-			i += 1
-
-	return F, dep, tmps
