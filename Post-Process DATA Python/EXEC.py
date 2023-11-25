@@ -137,7 +137,7 @@ if superposer_courbes != None and superposer_courbes == False:	# Si on affiche q
 					fig=fig,
 					ax=ax,
 					label_x="Temps (ms)",
-					label_y="Déplacement (mm)",
+					label_y="Déplacement ({0})".format(unite_dep),
 					fileName=[nom_fichier],
 					titre=titre)
 			i += 1
@@ -163,7 +163,7 @@ if superposer_courbes != None and superposer_courbes == False:	# Si on affiche q
 			graphe(	data_x=[tmps],
 					data_y=[F],
 					label_x="Temps (ms)",
-					label_y="Force (F)",
+					label_y="Force ({0})".format(unite_F),
 					titre=titre,
 					fig=fig,
 					ax=ax,
@@ -190,8 +190,8 @@ if superposer_courbes != None and superposer_courbes == False:	# Si on affiche q
 
 			graphe(	data_x=[dep],
 					data_y=[F],
-					label_x="Déplacement (mm)",
-					label_y="Force (F)",
+					label_x="Déplacement ({0})".format(unite_dep),
+					label_y="Force ({0})".format(unite_F),
 					titre=titre,
 					fig=fig,
 					ax=ax,
@@ -320,7 +320,7 @@ elif superposer_courbes != None and superposer_courbes:	# Si on affiche les fich
 					fig=fig,
 					ax=ax,
 					label_x="Temps (ms)",
-					label_y="Déplacement (mm)",
+					label_y="Déplacement ({0})".format(unite_dep),
 					fileName=fichiers,
 					titre=titre)
 			i += 1
@@ -348,7 +348,7 @@ elif superposer_courbes != None and superposer_courbes:	# Si on affiche les fich
 			graphe(	data_x=tmps,
 					data_y=F,
 					label_x="Temps (ms)",
-					label_y="Force (F)",
+					label_y="Force ({0})".format(unite_F),
 					titre=titre,
 					fig=fig,
 					ax=ax,
@@ -377,8 +377,8 @@ elif superposer_courbes != None and superposer_courbes:	# Si on affiche les fich
 
 			graphe(	data_x=dep,
 					data_y=F,
-					label_x="Déplacement (mm)",
-					label_y="Force (F)",
+					label_x="Déplacement ({0})";format(unite_dep),
+					label_y="Force ({0})".format(unite_F),
 					titre=titre,
 					fig=fig,
 					ax=ax,
