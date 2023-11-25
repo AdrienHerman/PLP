@@ -11,8 +11,8 @@
 #: ** True = Oui / False = Non
 #: ** Si cette option est à True, nom_dossier doit-être renseigné
 #: ** Sinon, nom_fichier doit-être renseigné
-superposer_courbes:False:
-nom_fichier:DATA/STRUCT_1_02.CSV:
+superposer_courbes:True:
+nom_fichier:DATA/STRUCT_1_01.CSV:
 nom_dossier:DATA/5/:
 #:
 #: ** Calculer les données de temps de l'essai
@@ -71,7 +71,7 @@ dep_max:19:
 #: ** Force = f(Déplacement) avec la méthode de Simpson à 3 points) est effectué.
 #: ** Attention à l'unité du résultat ! Les variables fact_force et fact_dep sont
 #: ** là pour changer l'unité de la force et du déplacement.
-calculer_energie:False:
+calculer_energie:True:
 fact_force:1:
 fact_dep:1e-3:
 #:---------------------------------------
@@ -84,10 +84,10 @@ fact_dep:1e-3:
 afficher_dep_tmps:True:
 #:
 #: ** Afficher le graphique Force = f(Temps) si afficher_F_tmps = True
-afficher_F_tmps:False:
+afficher_F_tmps:True:
 #:
 #: ** Afficher le graphique Force = f(Déplacement) si afficher_F_dep = True
-afficher_F_dep:False:
+afficher_F_dep:True:
 #:
 #: ** Afficher les graphiques séparéments si afficher_sep = True
 afficher_sep:False:

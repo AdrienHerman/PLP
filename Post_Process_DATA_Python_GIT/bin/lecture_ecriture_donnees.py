@@ -264,7 +264,7 @@ def enregistrer_donnees(F=[], dep=[], tmps=[], calc_temps=True, filePath="", uni
 		return False
 
 	if F != [] and dep != []:
-		if calc_temps == True:
+		if calc_temps:
 			if tmps != []:
 				string_file += unite_F + "," + unite_dep + "," + "ms\n"
 
