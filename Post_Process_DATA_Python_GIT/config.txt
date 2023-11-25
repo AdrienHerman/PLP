@@ -12,8 +12,8 @@
 #: ** Si cette option est à True, nom_dossier doit-être renseigné
 #: ** Sinon, nom_fichier doit-être renseigné
 superposer_courbes:True:
-nom_fichier:DATA/STRUCT_1_01.CSV:
-nom_dossier:DATA/5/:
+nom_fichier:DATA/EXEMPLE.CSV:
+nom_dossier:DATA/:
 #:
 #: ** Calculer les données de temps de l'essai
 #: ** True = Oui / False = Non
@@ -25,8 +25,8 @@ calc_temps:True:
 #: ** Sinon vous pouvez renseigner le nom de fichier ci-dessous.
 #: ** ATTENTION : Ne pas mettre .txt à la fin du nom de fichier.
 enregistrer_data:False:
-nom_enregistrement:STRUCT_5_03:
-dossier_enregistrement:DATA/1/:
+nom_enregistrement:EXEMPLE:
+dossier_enregistrement:DATA/:
 #:-----------------------------------
 #:
 #:---------------------------------------
