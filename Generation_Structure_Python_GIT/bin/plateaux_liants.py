@@ -58,6 +58,7 @@ def gen_plateaux2(	nb_couches=3,
 					current_posy += dimlat_par_couche[couchei + 1]
 				except:
 					pass
+					
 				continue
 
 			# Création de l'essquisse
