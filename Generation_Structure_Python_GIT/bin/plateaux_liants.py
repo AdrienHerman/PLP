@@ -4,7 +4,7 @@ HERMAN Adrien
 04/10/2023
 """
 
-def gen_plateaux2(	nb_couches=3,
+def gen_plateaux(	nb_couches=3,
 					ep_plateaux=[1,0.5,0.5,1],
 					dimlat_x=40,
 					dimlat_par_couche=[13.3,17.7,8.8],
@@ -100,7 +100,7 @@ def gen_plateaux2(	nb_couches=3,
 		if file_debug != None and debug:
 			wdebug("Extrusion des plateaux\n", file_debug)
 
-def gen_plateaux(	ep_plateaux=1,
+def gen_plateaux2(	ep_plateaux=1,
 					dimlat_x=20,
 					dimlat_y=20,
 					dimlat_ep=20,

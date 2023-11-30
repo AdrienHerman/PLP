@@ -18,11 +18,13 @@ def gen_losange(	ep=0.4,
 					sketch_visible=False,
 					extrude=True,
 					nom_sketch_losange="Sketch_Losange",
-					nom_sketch_plateaux="Sketch_Plateaux",
+					nom_sketch_plateaux_extremitees=["Sketch_Plateaux1","Sketch_Plateaux2"],
 					nom_body_losange="Body_Losange",
 					nom_pad_losange="Pad_Losange",
-					nom_pad_plateaux="Pad_Plateaux",
+					nom_pad_plateau_extremiteesx=["Pad_Plateaux1","Pad_Plateaux2"],
 					gen_plateaux=None,
+					export_body=None,
+					wdebug=None,
 					sketch=""):
 	"""
 	Génération de la structure de base (juste les losanges)
@@ -52,16 +54,6 @@ def gen_losange(	ep=0.4,
 	# Importation des modules externes
 	import FreeCAD as App
 	import FreeCADGui, ImportGui, Part, Sketcher, math, sys
-
-	# Importation des modules du logiciel
-	#sys.path.append("C:\Users\herma\Documents\Shadow Drive\INSA 5A\PLP\Generation Structures Python\Optimisation Masse")
-	#sys.path.append("C:\Users\herma\Documents\Shadow Drive\INSA 5A\PLP\Generation Structures Python")
-	sys.path.append("/home/adrien/Documents/Shadow Drive/INSA 5A/PLP/Generation Structures Python/Optimisation Masse/")
-	sys.path.append("/home/adrien/Documents/Shadow Drive/INSA 5A/PLP/Generation Structures Python/")
-	from plateaux_liants import gen_plateaux
-	from export_body import export_body
-	from debug import wdebug
-	from debug import create_file_debug
 
 	if doc == None:	doc = FreeCAD.newDocument()
 
@@ -330,17 +322,18 @@ def gen_losange(	ep=0.4,
 			wdebug("Extrusion de la structure\n", file_debug)
 		# Génération des plateaux liants les extrémités
 		if ep_plateaux > 0:
-			gen_plateaux(	ep_plateaux,
-							dimlat_x,
-							dimlat_y,
-							dimlat_ep,
-							sketch_visible,
-							nom_body_losange,
-							doc,
-							nom_sketch_plateaux,
-							nom_pad_plateaux,
-							debug,
-							file_debug)
+			gen_plateaux(	nb_couches=1,
+							ep_plateaux=[1,1],
+							dimlat_x=dimlat_x,
+							dimlat_par_couche=[dimlat_y],
+							dimlat_ep=dimlat_ep,
+							sketch_visible=sketch_visible,
+							nom_body_losange=nom_body_losange,
+							doc=doc,
+							nom_sketch_plateaux=nom_sketch_plateaux_extremitees,
+							nom_pad_plateaux=nom_pad_plateaux_extremitees,
+							debug=debug,
+							file_debug=file_debug)
 
 
 if __name__ == "__main__":

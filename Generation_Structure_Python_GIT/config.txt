@@ -21,13 +21,25 @@
 #: ** seuil_augmentation_correction, seuil_diminution_correction, rho
 #: ** doivent-être renseignées
 optimisation_masse:True:
+#: ** Objectif de masse à atteindre avant l'arrêt des calculs (en g)
 objectif_masse:18:
+#: ** Tolérance sur l'objectif de masse
+#: ** (objectif masse - tolérance >= masse calculée >= objectif masse + tolérance)
 tolerance:1e-1:
+#: ** Nombre d'itération maximale avant l'arrêt des calculs même si l'objectif
+#: ** de masse n'est pas atteint
 nb_pas_max:50:
-correction_ep_par_pas:1e-4:
+#: ** Valeur de correction de l'épaisseur des parois à chaque pas
+#: ** (augmentation ou diminution en mm)
+correction_ep_par_pas:7e-3:
+#: ** Pourcentage de modification de la variable correction_ep_par_pas utilisé
+#: ** si la convergence est trop lente / rapide
 pourcentage_modification_correction:0.1:
+#: ** Seuil à partir duquel correction_ep_par_pas est augmenté / diminuer
+#: METTRE FORMULE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 seuil_augmentation_correction:0.2:
 seuil_diminution_correction:0.2:
+#: ** Masse volumique du matériau utilisé pour l'impression (en g/cm^3)
 rho:1.24:
 #:
 #: /// GÉNÉRATION DE LOSANGES \\\
@@ -39,15 +51,19 @@ gen_losange_grad:False:
 #: --- PARTIE GÉOMÉTRIE DES STRUCTURES ---
 #: L'ensemble des valeurs ci-dessous sont exprimées en millimètre
 #:
-#: /// PLATEAUX LIANTS \\\
+#: /// PLATEAUX LIANTS EXTREMITEES \\\
 #: ** Les plateaux liants sont des pavés aux éxtrémités de la structures
 #: ** qui ont pour but de lier les motifs pour homogénéisé la répartition
 #: ** de la force d'impact.
 #: ** Si generation_plateaux = True les plateaux seront générés et 
 #: ** ep_plateaux doit être renseigné
-generation_plateaux:True:
+generation_plateaux_extremitees:True:
 #: ** Choix de l'épaisseur des plateaux liant les extrémité de la structure
-ep_plateaux:1:
+#: ** Ou les différentes couches
+#: ** Format ep,ep,etc... Les valeurs entrées sont les dimensions des plateaux en mm
+#: ** ATTENTION : Les valeurs doivent-êtres séparées par des , et les décimaux s'écrire
+#: ** avec des . (1.3)
+ep_plateaux_extremitees:1,1:
 #:
 #:
 #: /// PROPRIÉTÉS GÉOMÉTRIQUES COMMUNES \\\
@@ -72,10 +88,10 @@ nb_losange_x_lb:7:
 nb_losange_y_lb:4:
 #:
 #: ** Renseigne le nom du pad du losange
-nom_pad_losange:pad_losange:
+nom_pad_losange_basic:pad_losange:
 #:
 #: ** Renseigne le nom de l'esquisse du losange
-nom_sketch_losange:sketch_losange:
+nom_sketch_losange_basic:sketch_losange:
 #:
 #:
 #: /// GÉNÉRATION DE LOSANGES "GRAD" \\\
@@ -95,7 +111,11 @@ extrude:True:
 #: ** doivent-être renseignés
 #: ** ATTENTION : Si export = True, extrude doit être activé (extrude = True)
 export:True:
-export_name:structure.stl:
+#: ** export_name ne doit contenir uniquement le nom de l'exportation et sans extention
+export_name:structure:
+#: ** export_path ne doit contenir que le chemin à partir d'où le logiciel est avec le
+#: ** dossier où vous voulez exporter les structures. ATTENTION à ne pas oublier "/"
+#: ** à la fin du nom du dossier
 export_path:STRUCTURES_GENEREES/:
 #:
 #: ** Affiche l'(les)esquisse(s) de départ après l'extrusion
@@ -110,7 +130,7 @@ nom_body_losange:body_losange:
 #: ** Renseigne le nom de l'esquisse de définition des plateaux
 nom_sketch_plateaux:sketch_plateau:
 #: ** Renseigne le nom du pad des plateaux liant les parties hautes et basses de la structure
-nom_pad_plateau:pad_plateau:
+nom_pad_plateaux:pad_plateau:
 #:-------------------------------
 #:
 #:-------------------------
