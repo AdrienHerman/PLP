@@ -42,7 +42,8 @@ def lecture_param(path_config="config.txt"):
 	gen_func = [None for i in range(2)]
 	#	Géométrie générale
 	generation_plateaux_extremitees = None
-	ep_plateaux_extremitees = None
+	ep_plateau_dessous = None
+	ep_plateau_dessus = None
 	ep = None
 	dimlat_ep = None
 	dimlat_x = None
@@ -60,18 +61,12 @@ def lecture_param(path_config="config.txt"):
 	# 	Géométrie des losanges "basic"
 	nb_losange_x_lb = None
 	nb_losange_y_lb = None
-	nom_pad_losange_basic = None
-	nom_sketch_losange_basic = None
 	#	Partie exploitation du modèle 3D
 	extrude = None 
 	export = None 
 	export_name = None 
 	export_path = None 
 	sketch_visible = None
-	# 	Partie noms des objets
-	nom_body_losange = None
-	nom_sketch_plateaux = None
-	nom_pad_plateaux = None
 	# 	Partie Débogage
 	semi_debug = None 
 	debug = None 
@@ -114,12 +109,19 @@ def lecture_param(path_config="config.txt"):
 			if lignes[i][1] == "False":		generation_plateaux_extremitees = False
 			elif lignes[i][1] == "True":	generation_plateaux_extremitees = True
 			else:	print("lecture_param\nCommande inconnue pour generation_plateaux_extremitees")
-		elif lignes[i][0] == "ep_plateaux_extremite":
+		elif lignes[i][0] == "ep_plateau_dessous":
 			try:
-				ep_plateaux_extremitees = [float(lignes[i][1].split(",")[j]) for j in range(len(lignes[i][1].split(",")))]
+				ep_plateau_dessous = float(lignes[i][1])
 			except:
-				print("""	lecture_param\nLe type de données entrée dans ep_plateaux_extremitees n'est pas correct !
-							\n     ep_plateaux_extremitees
+				print("""	lecture_param\nLe type de données entrée dans ep_plateau_dessous n'est pas correct !
+							\n     ep_plateau_dessous
+		={0}""".format(lignes[i][1]))
+		elif lignes[i][0] == "ep_plateau_dessus":
+			try:
+				ep_plateau_dessus = float(lignes[i][1])
+			except:
+				print("""	lecture_param\nLe type de données entrée dans ep_plateau_dessus n'est pas correct !
+							\n     ep_plateau_dessus
 		={0}""".format(lignes[i][1]))
 		elif lignes[i][0] == "ep":
 			try:
@@ -213,10 +215,6 @@ def lecture_param(path_config="config.txt"):
 			except:
 				print("""	lecture_param\nLe type de données entrée dans nb_losange_y_lb n'est pas correct !
 							\n     nb_losange_y_lb={0}""".format(lignes[i][1]))
-		elif lignes[i][0] == "nom_pad_losange_basic":
-			nom_pad_losange_basic = str(lignes[i][1])
-		elif lignes[i][0] == "nom_sketch_losange_basic":
-			nom_sketch_losange_basic = str(lignes[i][1])
 
 		# Partie exploitation du modèle 3D
 		if lignes[i][0] == "extrude":
@@ -236,14 +234,6 @@ def lecture_param(path_config="config.txt"):
 			elif lignes[i][1] == "True":	sketch_visible = True
 			else:	print("lecture_param\nCommande inconnue pour sketch_visible")
 
-		# Partie noms des objets
-		if lignes[i][0] == "nom_body_losange":
-			nom_body_losange = str(lignes[i][1])
-		elif lignes[i][0] == "nom_sketch_plateaux":
-			nom_sketch_plateaux = str(lignes[i][1])
-		elif lignes[i][0] == "nom_pad_plateaux":
-			nom_pad_plateaux = str(lignes[i][1])
-
 		# Partie Débogage
 		if lignes[i][0] == "semi_debug":
 			if lignes[i][1] == "False":		semi_debug = False
@@ -261,7 +251,7 @@ def lecture_param(path_config="config.txt"):
 				gen_losange_basic,
 				gen_losange_grad,
 				generation_plateaux_extremitees,
-				ep_plateaux_extremitees,
+				[ep_plateau_dessous, ep_plateau_dessus],
 				ep,
 				dimlat_ep,
 				dimlat_x,
@@ -277,16 +267,11 @@ def lecture_param(path_config="config.txt"):
 				rho,
 				nb_losange_x_lb,
 				nb_losange_y_lb,
-				nom_pad_losange_basic,
-				nom_sketch_losange_basic,
 				extrude,
 				export,
 				export_name,
 				export_path,
 				sketch_visible,
-				nom_body_losange,
-				nom_sketch_plateaux,
-				nom_pad_plateaux,
 				semi_debug,
 				debug,
 				debug_current_folder]
@@ -304,8 +289,11 @@ def lecture_param(path_config="config.txt"):
 	if generation_plateaux_extremitees == None:
 		print("lecture_param\ngeneration_plateaux_extremitees n'est pas définie !")
 		return return_nok
-	elif ep_plateaux_extremitees == None:
-		print("lecture_param\nep_plateaux_extremite n'est pas définie !")
+	elif ep_plateau_dessous == None:
+		print("lecture_param\nep_plateau_dessous n'est pas définie !")
+		return return_nok
+	elif ep_plateau_dessus == None:
+		print("lecture_param\nep_plateau_dessus n'est pas définie !")
 		return return_nok
 	elif ep == None:
 		print("lecture_param\nep n'est pas définie !")
@@ -354,12 +342,6 @@ def lecture_param(path_config="config.txt"):
 		elif nb_losange_y_lb == None:
 			print("lecture_param\nnb_losange_y_lb n'est pas définie !")
 			return return_nok
-		elif nom_pad_losange_basic == None:
-			print("lecture_param\nnom_pad_losange_basic n'est pas définie !")
-			return return_nok
-		elif nom_sketch_losange_basic == None:
-			print("lecture_param\nnom_sketch_losange_basic n'est pas définie !")
-			return return_nok
 	
 	# Partie exploitation du modèle 3D
 	if extrude == None:
@@ -376,17 +358,6 @@ def lecture_param(path_config="config.txt"):
 		return return_nok
 	elif sketch_visible == None:
 		print("lecture_param\nsketch_visible n'est pas définie !")
-		return return_nok
-
-	# Partie noms des objets
-	if nom_body_losange == None:
-		print("lecture_param\nnom_body_losange n'est pas définie !")
-		return return_nok
-	elif nom_sketch_plateaux == None:
-		print("lecture_param\nnom_sketch_plateaux n'est pas définie !")
-		return return_nok
-	elif nom_pad_plateaux == None:
-		print("lecture_param\nnom_pad_plateaux n'est pas définie !")
 		return return_nok
 
 	# Partie Débogage

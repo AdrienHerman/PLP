@@ -12,17 +12,18 @@ def gen_losange(	ep=0.4,
 					dimlat_ep=5,
 					dimlat_x=20,
 					dimlat_y=20,
-					ep_plateaux=1,
+					ep_plateaux=[1,1],
 					semi_debug=False,
 					debug=False,
 					sketch_visible=False,
 					extrude=True,
 					nom_sketch_losange="Sketch_Losange",
-					nom_sketch_plateaux_extremitees=["Sketch_Plateaux1","Sketch_Plateaux2"],
+					nom_sketch_plateaux_extremitees=["Sketch_Plateau_Dessous", "Sketch_Plateau_Dessus"],
 					nom_body_losange="Body_Losange",
 					nom_pad_losange="Pad_Losange",
-					nom_pad_plateau_extremiteesx=["Pad_Plateaux1","Pad_Plateaux2"],
+					nom_pad_plateau_extremitees=["Pad_Plateau_Dessous", "Pad_Plateau_Dessus"],
 					gen_plateaux=None,
+					generation_plateaux_extremitees=None,
 					export_body=None,
 					wdebug=None,
 					sketch=""):
@@ -312,18 +313,19 @@ def gen_losange(	ep=0.4,
 
 	# Extrusion de l'esquisse & Génération des plateaux
 	if extrude:
-		doc.getObject(nom_body_losange).newObject('PartDesign::Pad', nom_pad_losange)						# Créer un Pad
-		doc.getObject(nom_pad_losange).Profile = doc.getObject(nom_sketch_losange)							# Mettre l'esquisse dans le pad
-		doc.getObject(nom_pad_losange).Length = dimlat_ep													# Définir la longueur d'extrustion
-		doc.getObject(nom_pad_losange).ReferenceAxis = (doc.getObject(nom_sketch_losange), ['N_Axis'])		# Définir la direction d'extrusion
-		doc.recompute()																						# Lancer les calculs
-		doc.getObject(nom_sketch_losange).Visibility = sketch_visible										# Affichage de l'esquisse après l'extrusion
+		pad_losange = doc.getObject(nom_body_losange).newObject('PartDesign::Pad', nom_pad_losange)	# Créer un Pad
+		pad_losange.Profile = sketch																# Mettre l'esquisse dans le pad
+		pad_losange.Length = dimlat_ep																# Définir la longueur d'extrustion
+		pad_losange.ReferenceAxis = (sketch, ['N_Axis'])											# Définir la direction d'extrusion
+		doc.recompute()																				# Lancer les calculs
+		sketch.Visibility = sketch_visible															# Affichage de l'esquisse après l'extrusion
 		if file_debug != None and debug:
 			wdebug("Extrusion de la structure\n", file_debug)
-		# Génération des plateaux liants les extrémités
-		if ep_plateaux > 0:
+
+		if generation_plateaux_extremitees:
+			# Génération des plateaux liants les extrémités
 			gen_plateaux(	nb_couches=1,
-							ep_plateaux=[1,1],
+							ep_plateaux=ep_plateaux,
 							dimlat_x=dimlat_x,
 							dimlat_par_couche=[dimlat_y],
 							dimlat_ep=dimlat_ep,
@@ -331,7 +333,7 @@ def gen_losange(	ep=0.4,
 							nom_body_losange=nom_body_losange,
 							doc=doc,
 							nom_sketch_plateaux=nom_sketch_plateaux_extremitees,
-							nom_pad_plateaux=nom_pad_plateaux_extremitees,
+							nom_pad_plateaux=nom_pad_plateau_extremitees,
 							debug=debug,
 							file_debug=file_debug)
 
