@@ -77,8 +77,9 @@ def opti_masse(	doc,
 				nom_pad_plateaux,
 				nom_sketch_losange,
 				nom_sketch_plateaux,
-				file_debug,
 				gen,
+				file_debug,
+				wdebug,
 				debug=False,
 				tolerance=1e-3,
 				nb_pas_max=100,
@@ -129,11 +130,6 @@ def opti_masse(	doc,
 	# Importation de modules Python
 	import sys
 
-	# Importation des modules du logiciel
-	#sys.path.append("C:\Users\herma\Documents\Shadow Drive\INSA 5A\PLP\Generation Structures Python")
-	sys.path.append("/home/adrien/Documents/Shadow Drive/INSA 5A/PLP/Generation Structures Python/")
-	from debug import wdebug
-
 	# Génération de la structure
 	gen(ep, doc, file_debug, *args)
 	
@@ -144,6 +140,7 @@ def opti_masse(	doc,
 			volume_sans_plateaux += doc.getObject(pad_losange).Shape.Volume * 1e-3	# cm^3
 	else:
 		volume_sans_plateaux = doc.getObject(nom_pad_losange).Shape.Volume * 1e-3	# cm^3
+		
 	volume_avec_plateaux = doc.getObject(nom_body).Shape.Volume * 1e-3				# cm^3
 	masse[pas] = volume_avec_plateaux * rho											# g
 	porosite = (1 - volume_sans_plateaux / volume_max) * 100						# %
@@ -189,8 +186,9 @@ def opti_masse(	doc,
 				nom_pad_plateaux,
 				nom_sketch_losange,
 				nom_sketch_plateaux,
-				file_debug,
 				gen,
+				file_debug,
+				wdebug,
 				debug,
 				tolerance,
 				nb_pas_max,
@@ -223,8 +221,9 @@ def opti_masse(	doc,
 				nom_pad_plateaux,
 				nom_sketch_losange,
 				nom_sketch_plateaux,
-				file_debug,
 				gen,
+				file_debug,
+				wdebug,
 				debug,
 				tolerance,
 				nb_pas_max,

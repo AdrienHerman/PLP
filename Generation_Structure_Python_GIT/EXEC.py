@@ -72,8 +72,9 @@ if lecture_param_ok:
 				["Pad_Plateau_Dessous", "Pad_Plateau_Dessus"],
 				"Sketch_Losange",
 				["Sketch_Plateau_Dessous", "Sketch_Plateau_Dessus"],
-				file_debug,
 				gen_losange,
+				file_debug,
+				wdebug,
 				debug,
 				tolerance,
 				nb_pas_max,
@@ -114,7 +115,7 @@ if lecture_param_ok:
 	affichage_calculs_masse(masse, objectif_masse, tolerance, pas_final, ep_finale, porosite, file_debug)
 
 	# Exportation en step de la pièce
-	export_body(doc, nom_body_losange, export, path_soft + export_path, export_name, debug, wdebug, file_debug)
+	export_body(doc, "Body_Losange", export, path_soft + export_path, export_name, debug, wdebug, file_debug)
 
 	# Fin du programme
 	wdebug("\n\n---------------------\n", file_debug)
