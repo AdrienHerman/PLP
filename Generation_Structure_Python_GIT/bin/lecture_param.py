@@ -61,6 +61,13 @@ def lecture_param(path_config="config.txt"):
 	# 	Géométrie des losanges "basic"
 	nb_losange_x_lb = None
 	nb_losange_y_lb = None
+	#	Géométrie des losanges "grad"
+	nb_y_par_couche_lg = None
+	nb_x_par_couche_lg = None
+	dimlat_par_couche_manuel_lg = None
+	dimlat_par_couche_lg = None
+	ep_par_couche_lg = None
+	ep_plateaux_lg = None
 	#	Partie exploitation du modèle 3D
 	extrude = None 
 	export = None 
@@ -216,6 +223,42 @@ def lecture_param(path_config="config.txt"):
 				print("""	lecture_param\nLe type de données entrée dans nb_losange_y_lb n'est pas correct !
 							\n     nb_losange_y_lb={0}""".format(lignes[i][1]))
 
+		# Géométrie des losanges "grad"
+		if lignes[i][0] == "nb_y_par_couche_lg":
+			try:
+				nb_losange_y_par_couche = [int(lignes[i][0].split(',')[j]) for j in range(len(lignes[i][0].split(',')))]
+			except:
+				print("""	lecture_param\nLe type de données entrée dans nb_losange_y_par_couche n'est pas correct !
+							\n     nb_losange_y_par_couche={0}""".format(lignes[i][1]))
+		elif lignes[i][0] == "nb_x_par_couche_lg":
+			try:
+				nb_losange_x_par_couche = [int(lignes[i][0].split(',')[j]) for j in range(len(lignes[i][0].split(',')))]
+			except:
+				print("""	lecture_param\nLe type de données entrée dans nb_losange_x_par_couche n'est pas correct !
+							\n     nb_losange_x_par_couche={0}""".format(lignes[i][1]))
+		elif lignes[i][0] == "dimlat_par_couche_manuel_lg":
+			if lignes[i][1] == "False":		dimlat_par_couche_manuel_lg = False
+			elif lignes[i][1] == "True":	dimlat_par_couche_manuel_lg = True
+			else:	print("lecture_param\nCommande inconnue pour dimlat_par_couche_manuel_lg")
+		elif lignes[i][0] == "dimlat_par_couche_lg":
+			try:
+				dimlat_par_couche_lg = [float(lignes[i][0].split(',')[j]) for j in range(len(lignes[i][0].split(',')))]
+			except:
+				print("""	lecture_param\nLe type de données entrée dans dimlat_par_couche_lg n'est pas correct !
+							\n     dimlat_par_couche_lg={0}""".format(lignes[i][1]))
+		elif lignes[i][0] == "ep_par_couche_lg":
+			try:
+				ep_par_couche_lg = [float(lignes[i][0].split(',')[j]) for j in range(len(lignes[i][0].split(',')))]
+			except:
+				print("""	lecture_param\nLe type de données entrée dans ep_par_couche_lg n'est pas correct !
+							\n     ep_par_couche_lg={0}""".format(lignes[i][1]))
+		elif lignes[i][0] == "ep_plateaux_lg":
+			try:
+				ep_plateaux_lg = [float(lignes[i][0].split(',')[j]) for j in range(len(lignes[i][0].split(',')))]
+			except:
+				print("""	lecture_param\nLe type de données entrée dans ep_plateaux_lg n'est pas correct !
+							\n     ep_plateaux_lg={0}""".format(lignes[i][1]))
+
 		# Partie exploitation du modèle 3D
 		if lignes[i][0] == "extrude":
 			if lignes[i][1] == "False":		extrude = False
@@ -267,6 +310,12 @@ def lecture_param(path_config="config.txt"):
 				rho,
 				nb_losange_x_lb,
 				nb_losange_y_lb,
+				nb_y_par_couche_lg,
+				nb_x_par_couche_lg,
+				dimlat_par_couche_manuel_lg,
+				dimlat_par_couche_lg,
+				ep_par_couche_lg,
+				ep_plateaux_lg,
 				extrude,
 				export,
 				export_name,
@@ -342,7 +391,49 @@ def lecture_param(path_config="config.txt"):
 		elif nb_losange_y_lb == None:
 			print("lecture_param\nnb_losange_y_lb n'est pas définie !")
 			return return_nok
-	
+
+	# Géométrie des losanges "grad"
+	if gen_losange_grad == True:
+		if nb_y_par_couche_lg == None:
+			print("lecture_param\nnb_y_par_couche_lg n'est pas définie !")
+			return return_nok
+		elif nb_x_par_couche_lg == None:
+			print("lecture_param\nnb_x_par_couche_lg n'est pas définie !")
+			return return_nok
+		elif dimlat_par_couche_manuel_lg == None:
+			print("lecture_param\ndimlat_par_couche_manuel_lg n'est pas définie !")
+			return return_nok
+		elif dimlat_par_couche_lg == None:
+			print("lecture_param\ndimlat_par_couche_lg n'est pas définie !")
+			return return_nok
+		elif ep_par_couche_lg == None:
+			print("lecture_param\nep_par_couche_lg n'est pas définie !")
+			return return_nok
+		elif ep_plateaux_lg == None:
+			print("lecture_param\nep_plateaux_lg n'est pas définie !")
+			return return_nok
+
+		if len(nb_x_par_couche_lg) != len(nb_y_par_couche_lg):
+			print("""lecture_param\nnb_x_par_couche_lg doit ({0}) avoir le 
+					même nombre d'items que nb_y_par_couche_lg ({1}) !""".format(	len(nb_x_par_couche_lg),
+																					len(nb_y_par_couche_lg)))
+			return return_nok
+		if len(dimlat_par_couche_lg) != len(nb_y_par_couche_lg):
+			print("""lecture_param\ndimlat_par_couche_lg doit ({0}) avoir le 
+					même nombre d'items que nb_y_par_couche_lg ({1}) !""".format(	len(dimlat_par_couche_lg),
+																					len(nb_y_par_couche_lg)))
+			return return_nok
+		if len(ep_par_couche_lg) != len(nb_y_par_couche_lg):
+			print("""lecture_param\nep_par_couche_lg doit ({0}) avoir le 
+					même nombre d'items que nb_y_par_couche_lg ({1}) !""".format(	len(ep_par_couche_lg),
+																					len(nb_y_par_couche_lg)))
+			return return_nok
+		if len(ep_plateaux_lg) - 1 != len(nb_y_par_couche_lg):
+			print("""lecture_param\nep_plateaux_lg doit ({0}) avoir un item de moins 
+					que nb_y_par_couche_lg ({1}) !""".format(	len(ep_plateaux_lg),
+																len(nb_y_par_couche_lg)))
+			return return_nok
+
 	# Partie exploitation du modèle 3D
 	if extrude == None:
 		print("lecture_param\nextrude n'est pas définie !")

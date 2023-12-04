@@ -15,7 +15,8 @@ def gen_plateaux(	nb_couches=3,
 					nom_sketch_plateaux=["Sketch_Plateaux1","Sketch_Plateaux2","Sketch_Plateaux3","Sketch_Plateaux4"],
 					nom_pad_plateaux=["Pad_Plateaux1","Pad_Plateaux2","Pad_Plateaux3","Pad_Plateaux4"],
 					debug=True,
-					file_debug=None):
+					file_debug=None,
+					wdebug=None):
 	"""
 	Génération des plateaux liants les strcutures sur le haut et le bas
 
@@ -40,11 +41,6 @@ def gen_plateaux(	nb_couches=3,
 	# Importation des modules python
 	import FreeCAD as App
 	import Part, Sketcher, sys
-
-	# Importation des modules du logiciel
-	sys.path.append("/home/adrien/Documents/Shadow Drive/INSA 5A/PLP/Generation Structures Python/")
-	#sys.path.append("C:\Users\herma\Documents\Shadow Drive\INSA 5A\PLP\Generation Structures Python")
-	from debug import wdebug
 
 	dimlat_par_couche.insert(0, 0)
 

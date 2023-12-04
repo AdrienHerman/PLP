@@ -19,6 +19,7 @@ from export_body import *
 from opti_masse import *
 from debug import *
 from losange.losange import *
+from losange.losange_grad import *
 
 # Lecture des parmaètres du programme
 [	lecture_param_ok,
@@ -41,6 +42,12 @@ from losange.losange import *
 	rho,
 	nb_losange_x_lb,
 	nb_losange_y_lb,
+	nb_y_par_couche_lg,
+	nb_x_par_couche_lg,
+	dimlat_par_couche_manuel_lg,
+	dimlat_par_couche_lg,
+	ep_par_couche_lg,
+	ep_plateaux_lg,
 	extrude,
 	export,
 	export_name,
@@ -52,10 +59,10 @@ from losange.losange import *
 
 if lecture_param_ok:
 	# Effacer les consoles Python et la Vue Rapport
-	mw=Gui.getMainWindow()
-	c=mw.findChild(QtGui.QPlainTextEdit, "Python console")
+	mw = Gui.getMainWindow()
+	c = mw.findChild(QtGui.QPlainTextEdit, "Python console")
 	c.clear()
-	r=mw.findChild(QtGui.QTextEdit, "Report view")
+	r = mw.findChild(QtGui.QTextEdit, "Report view")
 	r.clear()
 
 	# Initialisation des variables
@@ -109,7 +116,75 @@ if lecture_param_ok:
 				wdebug)
 
 	elif gen_losange_grad:
-		pass
+		# Création des listes pour les plateaux
+		plateaux = []
+		if generation_plateaux_extremitees:	plateaux.append(ep_plateaux_extremitees)
+		plateaux += ep_plateaux_lg
+		if generation_plateaux_extremitees:	plateaux.append(ep_plateaux_extremitees)
+
+		# Création des listes pour les noms des objets
+		nb_couches = len(nb_y_par_couche_lg)
+		nom_sketch_par_couche = ["Sketch_Losange" + str(i + 1) for i in range(nb_couches)]
+		nom_pad_par_couche = ["Pad_Losange" + str(i + 1) for i in range(nb_couches)]
+		nom_sketch_plateaux = ["Sketch_Plateaux" + str(i + 1) for i in range(nb_couches)]
+		nom_pad_plateaux = ["Pad_Plateaux" + str(i + 1) for i in range(nb_couches)]
+
+		# Dimensions de chaques couches
+		if dimlat_par_couche_manuel_lg:
+			dimlat_y = 0
+			for dimlat in dimlat_par_couche_lg:	dimlat_y += dimlat
+
+		else:
+			nb_losange_y = 0
+			for nb_losange in nb_losange_par_couche:	nb_losange_y += nb_losange
+			dimlat_par_couche = [nb_losange_par_couche[i] / nb_losange_y * dimlat_y for i in range(nb_couches)]
+
+
+		masse, pas_final, ep_finale, porosite = opti_masse(	
+				doc,
+				"Body_Losange",
+				nom_pad_par_couche,
+				nom_pad_plateaux,
+				nom_sketch_par_couche,
+				nom_sketch_plateaux,
+				grad_ep,
+				file_debug,
+				wdebug,
+				debug,
+				tolerance,
+				nb_pas_max,
+				[0 for i in range(nb_pas_max)],
+				ep,
+				0,
+				correction_ep_par_pas,
+				pourcentage_modification_correction,
+				seuil_augmentation_correction,
+				seuil_diminution_correction,
+				objectif_masse,
+				rho,
+				volume_max,
+				ep,
+				doc,
+				file_debug,
+				nb_couches,
+				nb_y_par_couche_lg,
+				dimlat_par_couche,
+				ep_par_couche_lg,
+				nom_sketch_par_couche,
+				nom_pad_par_couche,
+				dimlat_x,
+				dimlat_ep,
+				nb_losange_x_lb,
+				nom_sketch_plateaux,
+				nom_pad_plateaux,
+				"Body_Losange",
+				plateaux,
+				gen_plateaux,
+				gen_losange,
+				sketch_visible,
+				extrude,
+				semi_debug,
+				debug)
 
 	# Affichage du graphe de convergeance
 	affichage_calculs_masse(masse, objectif_masse, tolerance, pas_final, ep_finale, porosite, file_debug)

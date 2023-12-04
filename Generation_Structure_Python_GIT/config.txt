@@ -43,8 +43,8 @@ seuil_diminution_correction:0.2:
 rho:1.24:
 #:
 #: /// GÉNÉRATION DE LOSANGES \\\
-gen_losange_basic:True:
-gen_losange_grad:False:
+gen_losange_basic:False:
+gen_losange_grad:True:
 #:--------------------------------------
 #:
 #:-----------------------------------------
@@ -92,7 +92,34 @@ nom_sketch_losange_basic:sketch_losange:
 #:
 #:
 #: /// GÉNÉRATION DE LOSANGES "GRAD" \\\
+#: ** Choix du nombre de losanges en y par couches
+#: ** Les nombre de losanges doivent-être séparés par une ,
+#: ** ATTENTION : Il ne doit pas il y avoir un espace !
+nb_y_par_couche_lg:2,5,2:
 #:
+#: ** Choix du nombre de losanges en x par couches
+#: ** ATTENTION : Il doit il y avoir le même nombre de valeur que nb_y_par_couche_lg
+nb_x_par_couche_lg:7,7,7:
+#:
+#: ** Épaisseur des couches (en y)
+#: ** Si dimlat_par_couche_manuel = False, les dimensions des couches
+#: ** Son choisies automatiquement au prorata du nombre de losanges y
+#: ** par couche en fonction de la variable dimlat_y
+#: ** Si dimlat_par_couche_manuel = True, il faut renseigner manuellement
+#: ** les épaisseur de chaque couches
+dimlat_par_couche_manuel_lg:False:
+#: ** ATTENTION : Il doit il y avoir le même nombre de valeur que nb_y_par_couche_lg
+dimlat_par_couche_lg:13.3,17.7,8.8:
+#:
+#: ** Choix de l'épaisseur des parois de chaque couche
+#: ** ep_par_couche est en pourcentage de l'épaisseur ep définie ci-dessus
+#: ** ATTENTION : Il doit il y avoir le même nombre de valeur que nb_y_par_couche_lg
+ep_par_couche_lg:1,0.7,1
+#:
+#: ** Choix de l'épaisseur des plateaux liants les différentes couches en (mm)
+#: ** Laisser la valeur à 0 si le plateau ne doit pas être créé
+#: ** ATTENTION : Il doit il y avoir une valeur de moins que nb_y_par_couche_lg
+ep_plateaux_lg:0,0:
 #:
 #:-----------------------------------------
 #:

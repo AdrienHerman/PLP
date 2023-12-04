@@ -335,7 +335,8 @@ def gen_losange(	ep=0.4,
 							nom_sketch_plateaux=nom_sketch_plateaux_extremitees,
 							nom_pad_plateaux=nom_pad_plateau_extremitees,
 							debug=debug,
-							file_debug=file_debug)
+							file_debug=file_debug,
+							wdebug=wdebug)
 
 
 if __name__ == "__main__":
