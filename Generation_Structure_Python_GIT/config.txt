@@ -43,8 +43,8 @@ seuil_diminution_correction:0.2:
 rho:1.24:
 #:
 #: /// GÉNÉRATION DE LOSANGES \\\
-gen_losange_basic:False:
-gen_losange_grad:True:
+gen_losange_basic:True:
+gen_losange_grad:False:
 #:--------------------------------------
 #:
 #:-----------------------------------------
@@ -53,10 +53,10 @@ gen_losange_grad:True:
 #:
 #: /// PLATEAUX LIANTS EXTREMITEES \\\
 #: ** Les plateaux liants sont des pavés aux éxtrémités de la structures
-#: ** qui ont pour but de lier les motifs pour homogénéisé la répartition
+#: ** qui ont pour but de lier les motifs pour homogénéiser la répartition
 #: ** de la force d'impact.
-#: ** Si generation_plateaux = True les plateaux seront générés et 
-#: ** ep_plateaux doit être renseigné
+#: ** Si generation_plateaux_extremitees = True les plateaux seront générés et 
+#: ** ep_plateaux_dessous et ep_plateaux_dessus doivent être renseignés
 generation_plateaux_extremitees:True:
 #: ** Choix de l'épaisseur des plateaux liant les extrémité de la structure (mm)
 ep_plateau_dessous:1:
@@ -78,11 +78,11 @@ dimlat_x:40:
 dimlat_y:40:
 #:
 #:
-#: /// GÉNÉRATION DE LOSANGES "BASIC" \\\
+#: /// GÉNÉRATION DE MOTIFS SANS GRADIENT \\\
 #: ** Choix du nombre de losange sur l'axe x et sur l'axe y
 #: ** Entrer un nombre entier
-nb_losange_x_lb:7:
-nb_losange_y_lb:4:
+nb_motif_x_sg:7:
+nb_motif_y_sg:4:
 #:
 #: ** Renseigne le nom du pad du losange
 nom_pad_losange_basic:pad_losange:
@@ -91,15 +91,15 @@ nom_pad_losange_basic:pad_losange:
 nom_sketch_losange_basic:sketch_losange:
 #:
 #:
-#: /// GÉNÉRATION DE LOSANGES "GRAD" \\\
+#: /// GÉNÉRATION DE MOTIFS AVEC GRADIENT \\\
 #: ** Choix du nombre de losanges en y par couches
 #: ** Les nombre de losanges doivent-être séparés par une ,
 #: ** ATTENTION : Il ne doit pas il y avoir un espace !
-nb_y_par_couche_lg:2,5,2:
+nb_y_par_couche:2,5,2:
 #:
 #: ** Choix du nombre de losanges en x par couches
-#: ** ATTENTION : Il doit il y avoir le même nombre de valeur que nb_y_par_couche_lg
-nb_x_par_couche_lg:7,7,7:
+#: ** ATTENTION : Il doit il y avoir le même nombre de valeur que nb_y_par_couche
+nb_x_par_couche:7,7,7:
 #:
 #: ** Épaisseur des couches (en y)
 #: ** Si dimlat_par_couche_manuel = False, les dimensions des couches
@@ -107,19 +107,19 @@ nb_x_par_couche_lg:7,7,7:
 #: ** par couche en fonction de la variable dimlat_y
 #: ** Si dimlat_par_couche_manuel = True, il faut renseigner manuellement
 #: ** les épaisseur de chaque couches
-dimlat_par_couche_manuel_lg:False:
-#: ** ATTENTION : Il doit il y avoir le même nombre de valeur que nb_y_par_couche_lg
-dimlat_par_couche_lg:13.3,17.7,8.8:
+dimlat_par_couche_manuel:False:
+#: ** ATTENTION : Il doit il y avoir le même nombre de valeur que nb_y_par_couche
+dimlat_par_couche:13.3,17.7,8.8:
 #:
 #: ** Choix de l'épaisseur des parois de chaque couche
 #: ** ep_par_couche est en pourcentage de l'épaisseur ep définie ci-dessus
-#: ** ATTENTION : Il doit il y avoir le même nombre de valeur que nb_y_par_couche_lg
-ep_par_couche_lg:1,0.7,1
+#: ** ATTENTION : Il doit il y avoir le même nombre de valeur que nb_y_par_couche
+ep_par_couche:1,0.7,1
 #:
 #: ** Choix de l'épaisseur des plateaux liants les différentes couches en (mm)
 #: ** Laisser la valeur à 0 si le plateau ne doit pas être créé
-#: ** ATTENTION : Il doit il y avoir une valeur de moins que nb_y_par_couche_lg
-ep_plateaux_lg:0,0:
+#: ** ATTENTION : Il doit il y avoir une valeur de moins que nb_y_par_couche
+ep_plateaux:0,0:
 #:
 #:-----------------------------------------
 #:

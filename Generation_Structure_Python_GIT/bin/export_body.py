@@ -5,13 +5,13 @@ HERMAN Adrien
 """
 
 # Importation des modules Python
-import FreeCADGui, ImportGui, os
+import os
 
 def export_body(doc=None,
 				nom_body_losange="Body_Losange",
 				export=True,
 				export_path=os.getcwd(),
-				export_name = "export",
+				export_name="export",
 				debug=True,
 				wdebug=None,
 				file_debug=None):
@@ -28,17 +28,16 @@ def export_body(doc=None,
 		export_name -> Nom d'exportation de la pièce
 		debug -> Afficher les actions dans le terminal et dans le fichier de déboggage
 				debug_current_folder -> Générer le fichier de déboggage dans
-			le dossier "debug" du répertoire courrant si True, sinon
-			Générer le fichier de déboggae dans le dossier indiqué dans la variable
+				le dossier "debug" du répertoire courrant si True, sinon
+				Générer le fichier de déboggae dans le dossier indiqué dans la variable
+		wdebug -> Fonction d'écriture des informations de débogage dans le terminal et dans le fichier log
 		file_debug -> Fichier de déboggage (ouvert)
 	"""
 
-	# Importation de modules Python
-	import sys
+	# Importation des modules Python
+	import FreeCADGui, ImportGui, sys, Mesh
 
 	if export:
-		import Mesh
-
 		try:
 			if hasattr(Mesh, "exportOptions"):
 				options = Mesh.exportOptions(export_path + export_name + ".stl")

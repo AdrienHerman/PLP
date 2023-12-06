@@ -23,8 +23,7 @@ def gen_losange(	ep=0.4,
 					nom_pad_losange="Pad_Losange",
 					nom_pad_plateau_extremitees=["Pad_Plateau_Dessous", "Pad_Plateau_Dessus"],
 					gen_plateaux=None,
-					generation_plateaux_extremitees=None,
-					export_body=None,
+					generation_plateaux_extremitees=True,
 					wdebug=None,
 					sketch=""):
 	"""
@@ -39,16 +38,20 @@ def gen_losange(	ep=0.4,
 		dimlat_ep -> Épaisseur d'extrusion de la structure lattice
 		dimlat_x / dimlat_y -> Dimensions de la zone de construction
 		ep_plateaux -> Épaisseur des plateaux liant les extrémités de la structure (dans le sens de chargement)
+					   [Épaisseur du plateau du dessous, Épaisseur du plateau du dessus]
 		semi_debug -> Tracer les lignes de construction
 		debug -> Afficher les actions dans le terminal et dans le fichier de déboggage
 		sketch_visible -> Afficher l'esquisse de départ après l'extrusion = True
 		extrude -> Réaliser l'extrusion = True
 		nom_sketch_losange -> Nom de l'esquisse du losange
-		nom_sketch_plateaux -> Nom de l'esquisse de définition des plateaux
+		nom_sketch_plateaux_extremitees -> Nom des esquisses de définition des plateaux
 		nom_body_losange -> Nom de la pièce
 		nom_pad_losange -> Nom du pad du losange
-		nom_pad_plateau -> Num du pad des plateaux liant les parties hautes et basses de la structure
+		nom_pad_plateau -> Nom des pad des plateaux liant les parties hautes et basses de la structure
 		gen_plateaux -> Fonction de génération des plateaux liant les deux extrémités
+		generation_plateaux_extremitees -> True = Les plateaux aux extrémités sont générés, False = Génération des plateaux ignorés
+		wdebug -> Fonction d'écriture des informations de débogage dans le terminal et dans le fichier log
+		sketch -> Objet contenant l'esquisse de la structure losange
 	-----------
 	"""
 
@@ -68,13 +71,20 @@ def gen_losange(	ep=0.4,
 	liste_points_dessous = [[None for i in range(nb_losange_x)] for j in range(nb_losange_y * 2)]
 	liste_points_dessus = [[None for i in range(nb_losange_x)] for j in range(nb_losange_y * 2)]
 	liste_points_construction = [[None for i in range(nb_losange_x)] for j in range(nb_losange_y * 2)]
-	if file_debug != None and debug: wdebug("dimlat_x:{0}\ndimlat_y:{1}\ndimlat_ep:{2}\nnb_losange_x:{3}\nnb_losange_y:{4}\nnom_sketch_losange:{5}\n----\n".format(	dimlat_x,
-																																									dimlat_y,
-																																									dimlat_ep,
-																																									nb_losange_x,
-																																									nb_losange_y,
-																																									nom_sketch_losange),
-																																									file_debug)
+	if file_debug != None and debug: wdebug("""dimlat_x:{0}
+												\ndimlat_y:{1}
+												\ndimlat_ep:{2}
+												\nnb_losange_x:{3}
+												\nnb_losange_y:{4}
+												\nnom_sketch_losange:{5}
+												\n----\n""".format(	dimlat_x,
+																	dimlat_y,
+																	dimlat_ep,
+																	nb_losange_x,
+																	nb_losange_y,
+																	nom_sketch_losange),
+																	file_debug)
+
 	# Dimensions caractéristiques du losange calculées (voir schéma)
 	lx = dimlat_x / nb_losange_x
 	ly = dimlat_y / nb_losange_y
@@ -82,14 +92,21 @@ def gen_losange(	ep=0.4,
 	alpha = math.acos(0.5 * lx / cote)
 	epx = ep / (2 * math.sin(alpha))
 	epy = ep / (2 * math.cos(alpha))
-	if file_debug != None and debug: wdebug("ep:{0}\nlx:{1}\nly:{2}\ncote:{3}\nalpha:{4}\nepx:{5}\nepy:{6}\n----\n".format(	ep,
-																										lx,
-																										ly,
-																										cote,
-																										alpha,
-																										epx,
-																										epy),
-																										file_debug)
+	if file_debug != None and debug: wdebug("""ep:{0}
+												\nlx:{1}
+												\nly:{2}
+												\ncote:{3}
+												\nalpha:{4}
+												\nepx:{5}
+												\nepy:{6}
+												\n----\n""".format(	ep,
+																	lx,
+																	ly,
+																	cote,
+																	alpha,
+																	epx,
+																	epy),
+																	file_debug)
 	
 	"""
 	-----------------------
@@ -124,7 +141,7 @@ def gen_losange(	ep=0.4,
 																										point_delimitation[i % 4].y,
 																										point_delimitation[i % 4].z),
 																										file_debug)
-		wdebug("\n", file_debug)
+				wdebug("\n", file_debug)
 
 	# Curseur de position (repère local à chaque losange)
 	current_pos = (0,0,0)
@@ -324,6 +341,9 @@ def gen_losange(	ep=0.4,
 
 		if generation_plateaux_extremitees:
 			# Génération des plateaux liants les extrémités
+			if file_debug != None and debug:
+				wdebug("Création des plateaux liants les extrémités de la structure.\n", file_debug)
+
 			gen_plateaux(	nb_couches=1,
 							ep_plateaux=ep_plateaux,
 							dimlat_x=dimlat_x,
@@ -337,185 +357,3 @@ def gen_losange(	ep=0.4,
 							debug=debug,
 							file_debug=file_debug,
 							wdebug=wdebug)
-
-
-if __name__ == "__main__":
-	# Importation des modules externes
-	import FreeCAD as App
-	import FreeCADGui, ImportGui, Part, Sketcher, math, os, sys, time
-
-	# Effacer les consoles Python et la Vue Rapport
-	from PySide import QtGui
-	mw=Gui.getMainWindow()
-	c=mw.findChild(QtGui.QPlainTextEdit, "Python console")
-	c.clear()
-	r=mw.findChild(QtGui.QTextEdit, "Report view")
-	r.clear()
-
-	# Importation des modules du logiciel
-	#sys.path.append("C:\Users\herma\Documents\Shadow Drive\INSA 5A\PLP\Generation Structures Python\Optimisation Masse")
-	#sys.path.append("C:\Users\herma\Documents\Shadow Drive\INSA 5A\PLP\Generation Structures Python")
-	sys.path.append("/home/adrien/Documents/Shadow Drive/INSA 5A/PLP/Generation Structures Python/Optimisation Masse/")
-	sys.path.append("/home/adrien/Documents/Shadow Drive/INSA 5A/PLP/Generation Structures Python/")
-	from opti_masse import opti_masse
-	from opti_masse import affichage_calculs_masse
-	from plateaux_liants import gen_plateaux
-	from export_body import export_body
-	from debug import wdebug
-	from debug import create_file_debug
-
-	"""
-	Déboggage :
-
-	Variables :
-		semi_debug -> Tracer les lignes de construction
-		debug -> Afficher les actions dans le terminal et dans le fichier de déboggage
-		debug_current_folder -> Générer le fichier de déboggage dans
-			le dossier "debug" du répertoire courrant si True, sinon
-			Générer le fichier de déboggae dans le dossier indiqué dans la variable
-		file_debug -> Fichier de déboggage (ouvert)
-	"""
-	semi_debug = False 		# Lignes de construction
-	debug = True 			# Messages dans le terminal
-	#debug_current_folder = "C:\Users\herma\Documents\Shadow Drive\INSA 5A\PLP\Generation Structures Python\log"
-	debug_current_folder = "/home/adrien/Documents/Shadow Drive/INSA 5A/PLP/Generation Structures Python/log/"
-	file_debug = create_file_debug(debug_current_folder)
-
-	# Temps au début de l'exécution
-	temps_debut = time.time()
-
-	"""
-	Génération de la structure :
-
-	-----------
-	Variables :	
-		nb_losange_x / nb_losange_y -> Nombre de losanges sur la distance x / y
-		ep -> Épaisseur de la parois
-		dimlat_ep -> Épaisseur de l'extrusion du modèle
-		dimlat_x / dimlat_y -> Dimensions de la zone de construction
-		ep_plateaux -> Épaisseur des plateaux liant les extrémités de la structure (dans le sens de chargement)
-		sketch_visible -> Afficher l'esquisse de départ après l'extrusion = True
-		extrude -> Réaliser l'extrusion = True
-		export -> Exporter en step la pièce = True
-		export_name -> Nom d'exportation de la pièce
-		export_path -> Chemin vers la pièce à exporter (avec le nom_de_la_piece.step)
-		nom_sketch_losange -> Nom de l'esquisse du losange
-		nom_body_losange -> Nom de la pièce
-		nom_pad_losange -> Nom du pad du losange
-		nom_sketch_plateaux -> Nom de l'esquisse de définition des plateaux
-		nom_pad_plateau -> Num du pad des plateaux liant les parties hautes et basses de la structure
-		doc -> Document FreeCAD (Attention il s'agit de l'objet document, il doit-être ouvert)
-		volume_max -> Volume d'encombrement de la structure (utilisé pour le calcul de la porosité)
-	-----------
-	"""
-	nb_losange_x = 7
-	nb_losange_y = 9
-	ep = 0.3 				# mm
-				# ATTENTION : À ne pas mettre dans les arguments de
-				# l'optimisation de la masse destinés à la génération de la structure
-	dimlat_ep = 40			# mm
-	dimlat_x = 40 			# mm
-	dimlat_y = 40			# mm
-	ep_plateaux = 3 * 0.2 	# mm
-	sketch_visible = False
-	extrude = True
-	export = True
-	export_name = "losange"
-	#export_path = "C:\Users\herma\Documents\Shadow Drive\INSA 5A\PLP\Generation Structures Python"
-	export_path = "/home/adrien/Documents/Shadow Drive/INSA 5A/PLP/Generation Structures Python"
-	nom_sketch_losange = "Sketch_Losange"
-	nom_body_losange = "Body_Losange"
-	nom_pad_losange = "Pad_Losange"
-	nom_sketch_plateaux = "Sketch_Plateaux"
-	nom_pad_plateaux = "Pad_Plateaux"
-	doc = FreeCAD.newDocument()
-
-	# Volume maximal calculé
-	volume_max = dimlat_x * dimlat_y * dimlat_ep * 1e-3
-
-	"""
-	Optimisation de la masse de la structure
-
-	-----------
-	Variables :
-		objectif_masse -> Masse cible en g
-		tolerance -> Tolérance de calcul sur la masse en g
-		nb_pas_max -> Nombre maximal de pas de calcul
-		correction_ep_par_pas -> Pas de correction en épaisseur à chaque étape
-		rho -> Masse volumique du matériau utilisé en g/cm^3
-		pourcentage_modification_correction -> Pourcentage de modification de la variable correction_ep_par_pas
-		seuil_augmentation_correction / seuil_diminution_correction -> Seuils à dépasser pour augmenter / diminuer la variable correction_ep_par_pas
-	-----------
-	"""
-	objectif_masse = 18								# g
-	tolerance = 1e-1								# g
-	nb_pas_max = 50
-	correction_ep_par_pas = 1e-4 					# mm
-	rho = 1.24										# g/cm^3
-	pourcentage_modification_correction = 0.15		# %
-	seuil_augmentation_correction = 0.1				# g
-	seuil_diminution_correction = 0.5 				# g
-
-	masse, pas_final, ep_finale, porosite = opti_masse(	
-				doc,
-				nom_body_losange,
-				nom_pad_losange,
-				nom_pad_plateaux,
-				nom_sketch_losange,
-				nom_sketch_plateaux,
-				file_debug,
-				gen_losange,
-				debug,
-				tolerance,
-				nb_pas_max,
-				[0 for i in range(nb_pas_max)],
-				ep,
-				0,
-				correction_ep_par_pas,
-				pourcentage_modification_correction,
-				seuil_augmentation_correction,
-				seuil_diminution_correction,
-				objectif_masse,
-				rho,
-				volume_max,
-				nb_losange_x,
-				nb_losange_y,
-				dimlat_ep,
-				dimlat_x,
-				dimlat_y,
-				ep_plateaux,
-				semi_debug,
-				debug,
-				sketch_visible,
-				extrude,
-				nom_sketch_losange,
-				nom_sketch_plateaux,
-				nom_body_losange,
-				nom_pad_losange,
-				nom_pad_plateaux,
-				gen_plateaux)
-
-	# Affichage du graphe de convergeance
-	affichage_calculs_masse(masse, objectif_masse, tolerance, pas_final, ep_finale, porosite, file_debug)
-
-	# Exportation en step de la pièce
-	export_body(doc, nom_body_losange, export, export_path, export_name, debug, file_debug)
-
-	# Fin du programme
-	wdebug("\n\n---------------------\n", file_debug)
-	wdebug("--- Fin Programme ---\n", file_debug)
-	wdebug("---------------------\n", file_debug)
-
-	# Calcul de la durée d'exécution
-	temps_fin = time.time()
-	duree_exec = temps_fin - temps_debut
-	if duree_exec >= 60:	# Conversion en minute si nécessaire
-		duree_exec_min = int(duree_exec / 60)
-		duree_exec_sec = round(duree_exec % 60, 0)
-		wdebug("Temps d'exécution: {0}min {1}s\n".format(duree_exec_min, duree_exec_sec), file_debug)
-	else:
-		wdebug("Temps d'exécution: {0}s\n".format(round(duree_exec, 0)), file_debug)
-
-	# Fermeture du fichier de déboggage
-	if file_debug != None and debug:
-		file_debug.close()

@@ -42,12 +42,12 @@ from losange.losange_grad import *
 	rho,
 	nb_losange_x_lb,
 	nb_losange_y_lb,
-	nb_y_par_couche_lg,
-	nb_x_par_couche_lg,
-	dimlat_par_couche_manuel_lg,
-	dimlat_par_couche_lg,
-	ep_par_couche_lg,
-	ep_plateaux_lg,
+	nb_y_par_couche,
+	nb_x_par_couche,
+	dimlat_par_couche_manuel,
+	dimlat_par_couche,
+	ep_par_couche,
+	ep_plateaux,
 	extrude,
 	export,
 	export_name,
@@ -55,7 +55,12 @@ from losange.losange_grad import *
 	sketch_visible,
 	semi_debug,
 	debug,
-	debug_current_folder] = lecture_param(path_soft + "config.txt")
+	debug_current_folder,
+	log] = lecture_param(path_soft + "config.txt")
+
+# Création du fichier de débogage
+file_debug = create_file_debug(path_soft + debug_current_folder)
+wdebug(log, file_debug)
 
 if lecture_param_ok:
 	# Effacer les consoles Python et la Vue Rapport
@@ -69,7 +74,6 @@ if lecture_param_ok:
 	volume_max = dimlat_x * dimlat_y * dimlat_ep * 1e-3					# Volume maximal calculé (cm^3)
 	temps_debut = time.time()											# Calcul de la durée d'exécution
 	doc = FreeCAD.newDocument()											# Création d'un nouveau document FreeCAD
-	file_debug = create_file_debug(path_soft + debug_current_folder)	# Création du fichier de débogage
 
 	if gen_losange_basic:
 		masse, pas_final, ep_finale, porosite = opti_masse(	
@@ -112,32 +116,32 @@ if lecture_param_ok:
 				["Pad_Plateau_Dessous", "Pad_Plateau_Dessus"],
 				gen_plateaux,
 				generation_plateaux_extremitees,
-				export_body,
 				wdebug)
 
 	elif gen_losange_grad:
 		# Création des listes pour les plateaux
 		plateaux = []
-		if generation_plateaux_extremitees:	plateaux.append(ep_plateaux_extremitees)
-		plateaux += ep_plateaux_lg
-		if generation_plateaux_extremitees:	plateaux.append(ep_plateaux_extremitees)
+		if generation_plateaux_extremitees:	plateaux.append(ep_plateaux_extremitees[0])
+		plateaux += ep_plateaux
+		if generation_plateaux_extremitees:	plateaux.append(ep_plateaux_extremitees[1])
 
 		# Création des listes pour les noms des objets
-		nb_couches = len(nb_y_par_couche_lg)
+		nb_couches = len(nb_y_par_couche)
 		nom_sketch_par_couche = ["Sketch_Losange" + str(i + 1) for i in range(nb_couches)]
 		nom_pad_par_couche = ["Pad_Losange" + str(i + 1) for i in range(nb_couches)]
-		nom_sketch_plateaux = ["Sketch_Plateaux" + str(i + 1) for i in range(nb_couches)]
-		nom_pad_plateaux = ["Pad_Plateaux" + str(i + 1) for i in range(nb_couches)]
+		nom_sketch_plateaux = ["Sketch_Plateaux" + str(i + 1) for i in range(nb_couches + 1)]
+		nom_pad_plateaux = ["Pad_Plateaux" + str(i + 1) for i in range(nb_couches + 1)]
 
 		# Dimensions de chaques couches
-		if dimlat_par_couche_manuel_lg:
+		if dimlat_par_couche_manuel:
 			dimlat_y = 0
-			for dimlat in dimlat_par_couche_lg:	dimlat_y += dimlat
+			for dimlat in dimlat_par_couche:	dimlat_y += dimlat
 
 		else:
 			nb_losange_y = 0
-			for nb_losange in nb_losange_par_couche:	nb_losange_y += nb_losange
-			dimlat_par_couche = [nb_losange_par_couche[i] / nb_losange_y * dimlat_y for i in range(nb_couches)]
+			print(nb_y_par_couche)
+			for nb_losange in nb_y_par_couche:	nb_losange_y += nb_losange
+			dimlat_par_couche = [nb_y_par_couche[i] / nb_losange_y * dimlat_y for i in range(nb_couches)]
 
 
 		masse, pas_final, ep_finale, porosite = opti_masse(	
@@ -163,18 +167,15 @@ if lecture_param_ok:
 				objectif_masse,
 				rho,
 				volume_max,
-				ep,
-				doc,
-				file_debug,
 				nb_couches,
-				nb_y_par_couche_lg,
+				nb_y_par_couche,
 				dimlat_par_couche,
-				ep_par_couche_lg,
+				ep_par_couche,
 				nom_sketch_par_couche,
 				nom_pad_par_couche,
 				dimlat_x,
 				dimlat_ep,
-				nb_losange_x_lb,
+				nb_x_par_couche,
 				nom_sketch_plateaux,
 				nom_pad_plateaux,
 				"Body_Losange",
@@ -184,7 +185,8 @@ if lecture_param_ok:
 				sketch_visible,
 				extrude,
 				semi_debug,
-				debug)
+				debug,
+				wdebug)
 
 	# Affichage du graphe de convergeance
 	affichage_calculs_masse(masse, objectif_masse, tolerance, pas_final, ep_finale, porosite, file_debug)
