@@ -21,12 +21,12 @@ def affichage_calculs_masse(masse, objectif_masse, tolerance, pas, ep, porosite,
 	-----------
 	"""
 
-	# Importation du module de python pour afficher un graphe
+	# Importation des modules externes
 	import matplotlib.pyplot as plt
 	from matplotlib.ticker import MaxNLocator
 
 	fig, ax = plt.subplots()
-	ax.set_title("Nb_Iter = {0} | Masse_Finale = {1} g | Ep_Finale = {2} mm | Porosite = {3} % | Tolerance = +- {4} g".format(pas + 1, round(masse[pas - 1], precision), round(ep, precision), round(porosite, precision), tolerance / 2))
+	ax.set_title("Nb_Iter = {0} | Masse_Finale = {1} g | Ep_Finale = {2} mm | Porosite = {3} % | Tolerance = +- {4} g".format(pas, round(masse[pas - 1], precision), round(ep, precision), round(porosite, precision), tolerance / 2))
 	ax.set_xlabel("Nombre d'Itérations")
 	ax.xaxis.set_major_locator(MaxNLocator(integer=True))
 	ax.set_ylabel("Masse (g)")
@@ -77,8 +77,9 @@ def opti_masse(	doc,
 				nom_pad_plateaux,
 				nom_sketch_losange,
 				nom_sketch_plateaux,
-				file_debug,
 				gen,
+				file_debug,
+				wdebug,
 				debug=False,
 				tolerance=1e-3,
 				nb_pas_max=100,
@@ -105,8 +106,9 @@ def opti_masse(	doc,
 		nom_pad_plateau -> Num du pad des plateaux liant les parties hautes et basses de la structure
 		nom_sketch_losange -> Nom de l'esquisse du losange
 		nom_sketch_plateaux -> Nom de l'esquisse de définition des plateaux
-		file_debug -> Fichier de déboggage (ouvert)
 		gen -> Fonction de génération de la structure lattice
+		file_debug -> Fichier de déboggage (ouvert)
+		wdebug -> Fonction d'écriture des informations de débogage dans le terminal et dans le fichier log
 		debug -> Afficher les actions dans le terminal et dans le fichier de déboggage
 				debug_current_folder -> Générer le fichier de déboggage dans
 			le dossier "debug" du répertoire courrant si True, sinon
@@ -126,13 +128,8 @@ def opti_masse(	doc,
 	-----------
 	"""
 
-	# Importation de modules Python
+	# Importation des modules externes
 	import sys
-
-	# Importation des modules du logiciel
-	#sys.path.append("C:\Users\herma\Documents\Shadow Drive\INSA 5A\PLP\Generation Structures Python")
-	sys.path.append("/home/adrien/Documents/Shadow Drive/INSA 5A/PLP/Generation Structures Python/")
-	from debug import wdebug
 
 	# Génération de la structure
 	gen(ep, doc, file_debug, *args)
@@ -144,6 +141,7 @@ def opti_masse(	doc,
 			volume_sans_plateaux += doc.getObject(pad_losange).Shape.Volume * 1e-3	# cm^3
 	else:
 		volume_sans_plateaux = doc.getObject(nom_pad_losange).Shape.Volume * 1e-3	# cm^3
+		
 	volume_avec_plateaux = doc.getObject(nom_body).Shape.Volume * 1e-3				# cm^3
 	masse[pas] = volume_avec_plateaux * rho											# g
 	porosite = (1 - volume_sans_plateaux / volume_max) * 100						# %
@@ -189,8 +187,9 @@ def opti_masse(	doc,
 				nom_pad_plateaux,
 				nom_sketch_losange,
 				nom_sketch_plateaux,
-				file_debug,
 				gen,
+				file_debug,
+				wdebug,
 				debug,
 				tolerance,
 				nb_pas_max,
@@ -223,8 +222,9 @@ def opti_masse(	doc,
 				nom_pad_plateaux,
 				nom_sketch_losange,
 				nom_sketch_plateaux,
-				file_debug,
 				gen,
+				file_debug,
+				wdebug,
 				debug,
 				tolerance,
 				nb_pas_max,
@@ -242,6 +242,8 @@ def opti_masse(	doc,
 
 	else:
 		if file_debug != None and debug:
-			wdebug("\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n!!! NOMBRE MAXIMAL DE PAS ATTEINT !!!\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n", file_debug)
+			wdebug("""\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+					\n!!! NOMBRE MAXIMAL DE PAS ATTEINT !!!
+					\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n""", file_debug)
 
 		return masse, pas, ep, porosite

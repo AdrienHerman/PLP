@@ -9,16 +9,10 @@ def wdebug(string_debug, file_debug):
 	print(string_debug, end="")
 	file_debug.write(string_debug)
 
-def edebug(string_debug, file_debug):
-	# Gestion des erreurs du code
-	wdebug("---------------------\n", file_debug)
-	wdebug(" !!! ERREUR !!!\n", file_debug)
-	wdebug(" " + string_debug + "\n", file_debug)
-	wdebug("---------------------\n", file_debug)
-
 def create_file_debug(debug_current_folder=True):
+	# Importation des modules externes
 	import datetime, os
-	
+
 	# Création du fichier de déboggage
 	now = datetime.datetime.now()
 	dt_string = now.strftime("%d_%m_%Y__%H_%M_%S")
