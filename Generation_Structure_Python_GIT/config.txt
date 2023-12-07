@@ -43,8 +43,9 @@ seuil_diminution_correction:0.2:
 rho:1.24:
 #:
 #: /// GÉNÉRATION DE LOSANGES \\\
-gen_losange_basic:True:
+gen_losange_basic:False:
 gen_losange_grad:False:
+gen_hex_tri1_2D_aligne_basic:True:
 #:--------------------------------------
 #:
 #:-----------------------------------------
@@ -81,8 +82,8 @@ dimlat_y:40:
 #: /// GÉNÉRATION DE MOTIFS SANS GRADIENT \\\
 #: ** Choix du nombre de losange sur l'axe x et sur l'axe y
 #: ** Entrer un nombre entier
-nb_motif_x_sg:7:
-nb_motif_y_sg:4:
+nb_motif_x_sg:4:
+nb_motif_y_sg:10:
 #:
 #: ** Renseigne le nom du pad du losange
 nom_pad_losange_basic:pad_losange:
@@ -120,6 +121,10 @@ ep_par_couche:1,0.7,1
 #: ** Laisser la valeur à 0 si le plateau ne doit pas être créé
 #: ** ATTENTION : Il doit il y avoir une valeur de moins que nb_y_par_couche
 ep_plateaux:0,0:
+#:
+#: /// GÉNÉRATION DE LA STRUCTURE HEXAGONES + TRIANGLES1 2D ALIGNÉS OU NON \\\
+#: Radians
+alpha_hex_tri1_2D:1.0472:
 #:
 #:-----------------------------------------
 #:

@@ -20,11 +20,13 @@ from opti_masse import *
 from debug import *
 from losange.losange import *
 from losange.losange_grad import *
+from hexagone_triangle1_2D.hex_tri1_2D import *
 
 # Lecture des parmaètres du programme
 [	lecture_param_ok,
 	gen_losange_basic,
 	gen_losange_grad,
+	gen_hex_tri1_2D_aligne_basic,
 	generation_plateaux_extremitees,
 	ep_plateaux_extremitees,
 	ep,
@@ -40,14 +42,15 @@ from losange.losange_grad import *
 	seuil_augmentation_correction,
 	seuil_diminution_correction,
 	rho,
-	nb_losange_x_lb,
-	nb_losange_y_lb,
+	nb_motif_x_sg,
+	nb_motif_y_sg,
 	nb_y_par_couche,
 	nb_x_par_couche,
 	dimlat_par_couche_manuel,
 	dimlat_par_couche,
 	ep_par_couche,
 	ep_plateaux,
+	alpha_hex_tri1_2D,
 	extrude,
 	export,
 	export_name,
@@ -58,7 +61,7 @@ from losange.losange_grad import *
 	debug_current_folder,
 	log] = lecture_param(path_soft + "config.txt")
 
-# Création du fichier de débogage
+# Création du fichier de débogage & écriture des log de la fonction lecture_param
 file_debug = create_file_debug(path_soft + debug_current_folder)
 wdebug(log, file_debug)
 
@@ -99,8 +102,8 @@ if lecture_param_ok:
 				objectif_masse,
 				rho,
 				volume_max,
-				nb_losange_x_lb,
-				nb_losange_y_lb,
+				nb_motif_x_sg,
+				nb_motif_y_sg,
 				dimlat_ep,
 				dimlat_x,
 				dimlat_y,
@@ -186,6 +189,50 @@ if lecture_param_ok:
 				extrude,
 				semi_debug,
 				debug,
+				wdebug)
+
+	elif gen_hex_tri1_2D_aligne_basic:
+		masse, pas_final, ep_finale, porosite = opti_masse(	
+				doc,
+				"Body_Hex_Tri1_2D_Alignes",
+				"Pad_Hex_Tri1_2D_Alignes",
+				["Pad_Plateau_Dessous", "Pad_Plateau_Dessus"],
+				"Sketch_Hex_Tri1_2D_Alignes",
+				["Sketch_Plateau_Dessous", "Sketch_Plateau_Dessus"],
+				gen_hex_tri1_2D_aligne,
+				file_debug,
+				wdebug,
+				debug,
+				tolerance,
+				nb_pas_max,
+				[0 for i in range(nb_pas_max)],
+				ep,
+				0,
+				correction_ep_par_pas,
+				pourcentage_modification_correction,
+				seuil_augmentation_correction,
+				seuil_diminution_correction,
+				objectif_masse,
+				rho,
+				volume_max,
+				nb_motif_x_sg,
+				nb_motif_y_sg,
+				alpha_hex_tri1_2D,
+				dimlat_x,
+				dimlat_y,
+				dimlat_ep,
+				ep_plateaux_extremitees,
+				semi_debug,
+				debug,
+				sketch_visible,
+				extrude,
+				"Sketch_Hex_Tri1_2D_Alignes",
+				["Sketch_Plateau_Dessous", "Sketch_Plateau_Dessus"],
+				"Body_Hex_Tri1_2D_Alignes",
+				"Pad_Hex_Tri1_2D_Alignes",
+				["Pad_Plateau_Dessous", "Pad_Plateau_Dessus"],
+				gen_plateaux,
+				generation_plateaux_extremitees,
 				wdebug)
 
 	# Affichage du graphe de convergeance

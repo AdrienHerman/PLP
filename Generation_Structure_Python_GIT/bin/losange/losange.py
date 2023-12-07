@@ -57,7 +57,7 @@ def gen_losange(	ep=0.4,
 
 	# Importation des modules externes
 	import FreeCAD as App
-	import FreeCADGui, ImportGui, Part, Sketcher, math, sys
+	import FreeCADGui, ImportGui, Part, Sketcher, math
 
 	if doc == None:	doc = FreeCAD.newDocument()
 
@@ -115,12 +115,12 @@ def gen_losange(	ep=0.4,
 	"""
 	# Création d'une nouvelle esquisse et de la pièce
 	if sketch == "":
+		if file_debug != None and debug:
+			wdebug("Création de l'esquisse du losange : {0}\n".format(nom_sketch_losange), file_debug)
+			wdebug("Création du body du losange : {0}\n".format(nom_body_losange), file_debug)
+		
 		sketch = doc.addObject("Sketcher::SketchObject", nom_sketch_losange)
 		doc.addObject('PartDesign::Body', nom_body_losange)
-
-	if file_debug != None and debug:
-		wdebug("Création de l'esquisse du losange : {0}\n".format(nom_sketch_losange), file_debug)
-		wdebug("Création du body du losange : {0}\n".format(nom_body_losange), file_debug)
 
 	# Construction du rectangle de délimitation de la structure
 	#	Points de délimitation du quadrilatère (dans le sens anti-horaire)
@@ -350,7 +350,7 @@ def gen_losange(	ep=0.4,
 							dimlat_par_couche=[dimlat_y],
 							dimlat_ep=dimlat_ep,
 							sketch_visible=sketch_visible,
-							nom_body_losange=nom_body_losange,
+							nom_body=nom_body_losange,
 							doc=doc,
 							nom_sketch_plateaux=nom_sketch_plateaux_extremitees,
 							nom_pad_plateaux=nom_pad_plateau_extremitees,

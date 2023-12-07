@@ -47,7 +47,8 @@ def lecture_param(path_config="config.txt", debug=True):
 	#	Fonctions de génération
 	gen_losange_basic = None
 	gen_losange_grad = None
-	gen_func = [None for i in range(2)]
+	gen_hex_tri1_2D_aligne_basic = None
+	gen_func = [None for i in range(3)]
 	#	Géométrie générale
 	generation_plateaux_extremitees = None
 	ep_plateau_dessous = None
@@ -66,16 +67,18 @@ def lecture_param(path_config="config.txt", debug=True):
 	seuil_augmentation_correction = None
 	seuil_diminution_correction = None
 	rho = None
-	# 	Géométrie des losanges "basic"
+	# 	Géométries sans gradients
 	nb_motif_x_sg = None
 	nb_motif_y_sg = None
-	#	Géométrie des gradients
+	#	Géométries avec gradients
 	nb_y_par_couche = None
 	nb_x_par_couche = None
 	dimlat_par_couche_manuel = None
 	dimlat_par_couche = None
 	ep_par_couche = None
 	ep_plateaux = None
+	#	Géométrie Hexagones + Triangles 1 2D (Alignés ou Non / Avec ou sans gradients)
+	alpha_hex_tri1_2D = None
 	#	Partie exploitation du modèle 3D
 	extrude = None 
 	export = None 
@@ -100,7 +103,7 @@ def lecture_param(path_config="config.txt", debug=True):
 			log += "Impossible d'ouvrir le fichier de configuration\n"
 
 	# Parsing des données
-	if debug and debug:
+	if debug:
 		log += "Début du parsing des données\n"
 
 	for i in range(len(lignes)):
@@ -132,6 +135,16 @@ def lecture_param(path_config="config.txt", debug=True):
 			else:
 				if debug:
 					log += "lecture_param\nCommande inconnue pour gen_losange_grad\n"
+		elif lignes[i][0] == "gen_hex_tri1_2D_aligne_basic":
+			if lignes[i][1] == "False":
+				gen_hex_tri1_2D_aligne_basic = False
+				gen_func[2] = False
+			elif lignes[i][1] == "True":
+				gen_hex_tri1_2D_aligne_basic = True
+				gen_func[2] = True
+			else:
+				if debug:
+					log += "lecture_param\nCommande inconnue pour gen_hex_tri1_2D_aligne_basic\n"
 
 		# Géométrie
 		if lignes[i][0] == "generation_plateaux_extremitees":
@@ -247,7 +260,7 @@ def lecture_param(path_config="config.txt", debug=True):
 					log += """	lecture_param\nLe type de données entrée dans rho n'est pas correct !
 									\n     rho={0}\n""".format(lignes[i][1])
 
-		# Géométrie des losanges "basic"
+		# Géométrie sans gradients
 		if lignes[i][0] == "nb_motif_x_sg":
 			try:
 				nb_motif_x_sg = int(lignes[i][1])
@@ -263,7 +276,7 @@ def lecture_param(path_config="config.txt", debug=True):
 					log += """	lecture_param\nLe type de données entrée dans nb_motif_y_sg n'est pas correct !
 									\n     nb_motif_y_sg={0}\n""".format(lignes[i][1])
 
-		# Géométrie des losanges "grad"
+		# Géométries avec gradients
 		if lignes[i][0] == "nb_y_par_couche":
 			try:
 				nb_y_par_couche = [int(lignes[i][1].split(',')[j]) for j in range(len(lignes[i][1].split(',')))]
@@ -305,6 +318,15 @@ def lecture_param(path_config="config.txt", debug=True):
 				if debug:
 					log += """	lecture_param\nLe type de données entrée dans ep_plateaux n'est pas correct !
 									\n     ep_plateaux={0}\n""".format(lignes[i][1])
+
+		# Géométrie Hexagones + Triangles 1 2D (Alignés ou Non / Avec ou sans gradients)
+		if lignes[i][0] == "alpha_hex_tri1_2D":
+			try:
+				alpha_hex_tri1_2D = float(lignes[i][1])
+			except:
+				if debug:
+					log += """	lecture_param\nLe type de données entrée dans alpha_hex_tri1_2D n'est pas correct !
+									\n     alpha_hex_tri1_2D={0}\n""".format(lignes[i][1])
 
 		# Partie exploitation du modèle 3D
 		if lignes[i][0] == "extrude":
@@ -350,6 +372,7 @@ def lecture_param(path_config="config.txt", debug=True):
 	return_ok = [	True,
 				gen_losange_basic,
 				gen_losange_grad,
+				gen_hex_tri1_2D_aligne_basic,
 				generation_plateaux_extremitees,
 				[ep_plateau_dessous, ep_plateau_dessus],
 				ep,
@@ -373,6 +396,7 @@ def lecture_param(path_config="config.txt", debug=True):
 				dimlat_par_couche,
 				ep_par_couche,
 				ep_plateaux,
+				alpha_hex_tri1_2D,
 				extrude,
 				export,
 				export_name,
@@ -474,7 +498,7 @@ def lecture_param(path_config="config.txt", debug=True):
 		return_nok.append(log)
 		return return_nok
 
-	# 	Traitement des variables concernant la géométrie des losanges "basic"
+	# 	Traitement des variables concernant les éométrie sans gradients
 	if gen_losange_basic == True:
 		if nb_motif_x_sg == None:
 			if debug:
@@ -487,7 +511,7 @@ def lecture_param(path_config="config.txt", debug=True):
 			return_nok.append(log)
 			return return_nok
 
-	# Géométrie des losanges "grad"
+	# Géométries avec gradients
 	if gen_losange_grad == True:
 		if nb_y_par_couche == None:
 			if debug:
@@ -546,6 +570,14 @@ def lecture_param(path_config="config.txt", debug=True):
 				log += """lecture_param\nep_plateaux doit ({0}) avoir un item de moins 
 						que nb_y_par_couche ({1}) !\n""".format(	len(ep_plateaux),
 																len(nb_y_par_couche))
+			return_nok.append(log)
+			return return_nok
+
+	# Géométrie Hexagones + Triangles 1 2D (Alignés ou Non / Avec ou sans gradients)
+	if alpha_hex_tri1_2D == True:
+		if alpha_hex_tri1_2D == None:
+			if debug:
+				log += "lecture_param\nalpha_hex_tri1_2D n'est pas définie !\n"
 			return_nok.append(log)
 			return return_nok
 
