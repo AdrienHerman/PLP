@@ -74,7 +74,7 @@ if superposer_courbes != None and superposer_courbes == False:	# Si on affiche q
 	impact_text = ""
 
 	if detect_fin_essai != None and detect_fin_essai and sppr_rollback and recherche_deb_impact and tarrage_dep:
-		F, dep, tmps, impact = fin_essai(F=F, dep=dep, tmps=tmps)
+		F, dep, tmps, impact = fin_essai(F=F, dep=dep, tmps=tmps, dep_max=dep_max)
 
 		if impact:
 			impact_text = " / Stop impacteur"
@@ -242,7 +242,8 @@ elif superposer_courbes != None and superposer_courbes:	# Si on affiche les fich
 		for i in range(len(F)):
 			F[i], dep[i], tmps[i], impact[i] = fin_essai(	F=F[i],
 															dep=dep[i],
-															tmps=tmps[i])
+															tmps=tmps[i],
+															dep_max=dep_max)
 		
 		if True in impact and False in impact:
 			impact_text = " / " + str(impact.count(True)) + " stop impacteur & " + str(impact.count(False)) + " totalement absobées"
@@ -283,7 +284,6 @@ elif superposer_courbes != None and superposer_courbes:	# Si on affiche les fich
 								heure=en_tetes[i][4])
 
 	# Création des trois graphes dans une figure
-
 	if afficher_sep != None and afficher_sep:
 		figs = [0, 0, 0]
 		axs = [0, 0, 0]
@@ -293,9 +293,9 @@ elif superposer_courbes != None and superposer_courbes:	# Si on affiche les fich
 
 	elif afficher_sep != None and afficher_sep == False and [afficher_dep_tmps, afficher_F_dep, afficher_F_tmps].count(True) > 0:
 		fig, axs = plt.subplots([afficher_dep_tmps, afficher_F_dep, afficher_F_tmps].count(True), 1)
-
-	if afficher_sep != None and i < len(fichiers):
-		i = 0
+	
+	if afficher_sep != None:
+		j = 0
 
 		if afficher_dep_tmps != None and afficher_dep_tmps:
 			titre = ""
@@ -320,9 +320,10 @@ elif superposer_courbes != None and superposer_courbes:	# Si on affiche les fich
 					fig=fig,
 					ax=ax,
 					label_x="Temps (ms)",
-					label_y="Déplacement ({0})".format(en_tetes[i][1]),
+					label_y="Déplacement ({0})".format(en_tetes[j][1]),
 					fileName=fichiers,
 					titre=titre)
+
 			i += 1
 
 		if afficher_F_tmps != None and afficher_F_tmps:
@@ -348,11 +349,12 @@ elif superposer_courbes != None and superposer_courbes:	# Si on affiche les fich
 			graphe(	data_x=tmps,
 					data_y=F,
 					label_x="Temps (ms)",
-					label_y="Force ({0})".format(en_tetes[i][0]),
+					label_y="Force ({0})".format(en_tetes[j][0]),
 					titre=titre,
 					fig=fig,
 					ax=ax,
 					fileName=fichiers)
+
 			i += 1
 
 		if afficher_F_dep != None and afficher_F_dep:
@@ -375,18 +377,16 @@ elif superposer_courbes != None and superposer_courbes:	# Si on affiche les fich
 				else:
 					ax = axs[i]
 
-			# en_tetes[i][1]
-			# en_tetes[i][0]
-
 			graphe(	data_x=dep,
 					data_y=F,
-					label_x="Déplacement ({0})".format("mm"),
-					label_y="Force ({0})".format("N"),
+					label_x="Déplacement ({0})".format(en_tetes[j][1]),
+					label_y="Force ({0})".format(en_tetes[j][0]),
 					titre=titre,
 					fig=fig,
 					ax=ax,
 					fileName=fichiers)
-			i += 1
+		
+		j += 1
 
 try:
 	if afficher_sep != None:

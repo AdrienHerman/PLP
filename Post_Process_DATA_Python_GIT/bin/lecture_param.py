@@ -112,7 +112,7 @@ def lecture_param(path_config="config.txt"):
 			else:	print("lecture_param\nCommande inconnue pour detect_fin_essai")
 		elif lignes[i][0] == "dep_max":
 			try:
-				dep_max = int(lignes[i][1])
+				dep_max = float(lignes[i][1])
 			except:
 				print("""	lecture_param\nLe type de données entrée dans dep_max n'est pas correct !
 							\n     dep_max={0}""".format(lignes[i][1]))
