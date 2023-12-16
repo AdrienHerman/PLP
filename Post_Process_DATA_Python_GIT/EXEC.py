@@ -23,6 +23,8 @@ from bin.traitement_data import *
 	dossier_enregistrement,
 	sppr_rollback,
 	recherche_deb_impact,
+	deb_impact_manuel,
+	tmps_deb_impact,
 	tarrage_dep,
 	tarrage_tmps,
 	detect_fin_essai,
@@ -37,7 +39,7 @@ from bin.traitement_data import *
 	afficher_F_dep,
 	afficher_sep] = lecture_param()
 
-if superposer_courbes != None and superposer_courbes == False:	# Si on affiche qu'un seul fichier de données
+if not superposer_courbes:	# Si on affiche qu'un seul fichier de données
 	# Lecture du fichier
 	lignes = lire_fichier_csv_oscilo(filePath=nom_fichier)
 	unite_F, unite_dep, echantillonage, date, heure = lire_en_tete_csv_oscilo(lignes=lignes)
@@ -46,15 +48,15 @@ if superposer_courbes != None and superposer_courbes == False:	# Si on affiche q
 	F, dep = lire_contenu_csv_oscillo(lignes=lignes)
 
 	# Calcul de temps de l'essai
-	if calc_temps != None and calc_temps:
+	if calc_temps:
 		tmps = calc_temps_essai(dep=dep, echantillonage=echantillonage)
 
 	# Suppression du rollback
-	if sppr_rollback != None and sppr_rollback:
+	if sppr_rollback:
 		F, dep, tmps = suppr_rollback(F=F, dep=dep, tmps=tmps)
 
 	# Recherche du début de l'impact
-	if recherche_deb_impact != None and taux_augmentation != None and nb_pas_avant_augmentation != None and recherche_deb_impact:
+	if taux_augmentation != None and nb_pas_avant_augmentation != None and recherche_deb_impact and not deb_impact_manuel:
 		F, dep, tmps = recherche_debut_impact(	F=F,
 												dep=dep,
 												tmps=tmps,
@@ -62,18 +64,28 @@ if superposer_courbes != None and superposer_courbes == False:	# Si on affiche q
 												nb_pas_avant_augmentation=nb_pas_avant_augmentation,
 												fileName=nom_fichier)
 	elif (nb_pas_avant_augmentation == None or taux_augmentation == None) and recherche_deb_impact:
-		print("La vairiable taux_augmentation et nb_pas_avant_augmentation doivent-être renseignées dans le fichier de configuration !")
+		print("La variable taux_augmentation et nb_pas_avant_augmentation doivent-être renseignées dans le fichier de configuration !")
+
+	elif deb_impact_manuel and recherche_deb_impact:
+		print("La recherche de début d'impact manuel ne peut pas être activée en même temps que la recherche d'impact automatique !")
+
+	# Début d'impact manuel
+	if deb_impact_manuel and calc_temps:
+		F, dep, tmps = debut_impact_manuel(	F=F,
+											dep=dep,
+											tmps=tmps,
+											tmps_deb_impact=tmps_deb_impact)
 
 	# Tarrage du déplacement et du temps
-	if tarrage_dep != None and tarrage_dep and recherche_deb_impact:
+	if tarrage_dep and (recherche_deb_impact or deb_impact_manuel):
 		dep = tare_dep(dep=dep)
-	if tarrage_tmps != None and tarrage_tmps and recherche_deb_impact:
+	if tarrage_tmps and (recherche_deb_impact or deb_impact_manuel):
 		tmps = tare_tmps(tmps=tmps)
 	
 	# Suppression des données après la fin de l'impact
 	impact_text = ""
 
-	if detect_fin_essai != None and detect_fin_essai and sppr_rollback and recherche_deb_impact and tarrage_dep:
+	if detect_fin_essai and ((sppr_rollback and recherche_deb_impact and tarrage_dep) or deb_impact_manuel):
 		F, dep, tmps, impact = fin_essai(F=F, dep=dep, tmps=tmps, dep_max=dep_max)
 
 		if impact:
@@ -81,15 +93,15 @@ if superposer_courbes != None and superposer_courbes == False:	# Si on affiche q
 		elif impact == False:
 			impact_text = " / Énergie totalement absobée"
 
-	elif sppr_rollback != True or recherche_deb_impact != True or tarrage_dep != True:
-		print("Les paramètres sppr_rollback, recherche_deb_impact et tarrage_dep doivent-être activés pour effectuer la détection de fin d'impact !")
+	elif (not sppr_rollback or not recherche_deb_impact or not tarrage_dep) and not deb_impact_manuel:
+		print("Les paramètres deb_impact_manuel ou sppr_rollback, recherche_deb_impact et tarrage_dep doivent-être activés pour effectuer la détection de fin d'impact !")
 
 	# Calcul de l'énergie
-	if calculer_energie != None and calculer_energie:
+	if calculer_energie:
 		energie_impact = energie(F=F, dep=dep, fact_force=fact_force, fact_dep=fact_dep)
 
 	# Enregistrement des données traitées
-	if enregistrer_data != None and enregistrer_data:
+	if enregistrer_data:
 		enregistrer_donnees(	F=F,
 								dep=dep,
 								tmps=tmps,
@@ -102,20 +114,20 @@ if superposer_courbes != None and superposer_courbes == False:	# Si on affiche q
 								heure=heure)
 
 	# Création des trois graphes dans une figure
-	if afficher_sep != None and afficher_sep:
+	if afficher_sep:
 		figs = [0, 0, 0]
 		axs = [0, 0, 0]
 
 		for i in range([afficher_dep_tmps, afficher_F_dep, afficher_F_tmps].count(True)):
 			figs[i], axs[i] = plt.subplots()
 
-	elif afficher_sep != None and afficher_sep == False and [afficher_dep_tmps, afficher_F_dep, afficher_F_tmps].count(True) > 0:
+	elif not afficher_sep and [afficher_dep_tmps, afficher_F_dep, afficher_F_tmps].count(True) > 0:
 		fig, axs = plt.subplots([afficher_dep_tmps, afficher_F_dep, afficher_F_tmps].count(True), 1)
 
 	if afficher_sep != None:
 		i = 0
 
-		if afficher_dep_tmps != None and afficher_dep_tmps:
+		if afficher_dep_tmps:
 			if afficher_sep:
 				fig = figs[i]
 				ax = axs[i]
@@ -142,7 +154,7 @@ if superposer_courbes != None and superposer_courbes == False:	# Si on affiche q
 					titre=titre)
 			i += 1
 
-		if afficher_F_tmps != None and afficher_F_tmps:
+		if afficher_F_tmps:
 			if afficher_sep:
 				fig = figs[i]
 				ax = axs[i]
@@ -154,7 +166,7 @@ if superposer_courbes != None and superposer_courbes == False:	# Si on affiche q
 
 			titre = ""
 
-			if (afficher_dep_tmps == None or afficher_dep_tmps == False) or afficher_sep:
+			if (afficher_dep_tmps == None or not afficher_dep_tmps) or afficher_sep:
 				if calculer_energie:
 					titre = "Énergie Calculée = " + str(round(energie_impact, 2)) + " J" + impact_text
 				else:
@@ -170,7 +182,7 @@ if superposer_courbes != None and superposer_courbes == False:	# Si on affiche q
 					fileName=[nom_fichier])
 			i += 1
 
-		if afficher_F_dep != None and afficher_F_dep:
+		if afficher_F_dep:
 			if afficher_sep:
 				fig = figs[i]
 				ax = axs[i]
@@ -182,7 +194,7 @@ if superposer_courbes != None and superposer_courbes == False:	# Si on affiche q
 
 			titre = ""
 
-			if ((afficher_dep_tmps == None or afficher_dep_tmps == False) and (afficher_F_tmps == None or afficher_F_tmps == False)) or afficher_sep:
+			if ((afficher_dep_tmps == None or not afficher_dep_tmps) and (afficher_F_tmps == None or not afficher_F_tmps)) or afficher_sep:
 				if calculer_energie:
 					titre = "Énergie Calculée = " + str(round(energie_impact, 2)) + " J" + impact_text
 				else:
@@ -197,7 +209,7 @@ if superposer_courbes != None and superposer_courbes == False:	# Si on affiche q
 					ax=ax,
 					fileName=[nom_fichier])
 
-elif superposer_courbes != None and superposer_courbes:	# Si on affiche les fichiers de données d'un dossier
+elif superposer_courbes:	# Si on affiche les fichiers de données d'un dossier
 	# Lecture des fichiers
 	fichiers = liste_fichier_dossier(path=nom_dossier, fileType=".csv")
 	lignes = [lire_fichier_csv_oscilo(filePath=nom_dossier + f) for f in fichiers]
@@ -208,15 +220,15 @@ elif superposer_courbes != None and superposer_courbes:	# Si on affiche les fich
 	dep = [lire_contenu_csv_oscillo(lignes=l)[1] for l in lignes]
 
 	# Calcul des temps des essais
-	if calc_temps != None and calc_temps:
+	if calc_temps:
 		tmps = [calc_temps_essai(dep=dep[i], echantillonage=en_tetes[i][2]) for i in range(len(dep))]
 
 	# Suppression du rollback
-	if sppr_rollback != None and sppr_rollback:
+	if sppr_rollback:
 		for i in range(len(F)):	F[i], dep[i], tmps[i] = suppr_rollback(F=F[i], dep=dep[i], tmps=tmps[i])
 
 	# Recherche du début de l'impact
-	if recherche_deb_impact != None and taux_augmentation != None and nb_pas_avant_augmentation != None and recherche_deb_impact:
+	if taux_augmentation != None and nb_pas_avant_augmentation != None and recherche_deb_impact and not deb_impact_manuel:
 		for i in range(len(F)):
 			F[i], dep[i], tmps[i] = recherche_debut_impact(	F=F[i],
 															dep=dep[i],
@@ -227,17 +239,28 @@ elif superposer_courbes != None and superposer_courbes:	# Si on affiche les fich
 	elif (nb_pas_avant_augmentation == None or taux_augmentation == None) and recherche_deb_impact:
 		print("La vairiable taux_augmentation et nb_pas_avant_augmentation doivent-être renseignées dans le fichier de configuration !")
 
+	elif deb_impact_manuel and recherche_deb_impact:
+		print("La recherche de début d'impact manuel ne peut pas être activée en même temps que la recherche d'impact automatique !")
+
+	# Début d'impact manuel
+	if deb_impact_manuel and calc_temps:
+		for i in range(len(F)):
+			F[i], dep[i], tmps[i] = debut_impact_manuel(F=F[i],
+														dep=dep[i],
+														tmps=tmps[i],
+														tmps_deb_impact=tmps_deb_impact)
+
 	# Tarrage du déplacement et du temps
-	if tarrage_dep != None and tarrage_dep and recherche_deb_impact:
+	if tarrage_dep and (recherche_deb_impact or deb_impact_manuel):
 		dep = [tare_dep(dep=d) for d in dep]
 	
-	if tarrage_tmps != None and tarrage_tmps and recherche_deb_impact:
+	if tarrage_tmps and (recherche_deb_impact or deb_impact_manuel):
 		tmps = [tare_tmps(tmps=t) for t in tmps]
 
 	# Suppression des données après la fin de l'impact
 	impact_text = ""
 
-	if detect_fin_essai != None and detect_fin_essai and sppr_rollback and recherche_deb_impact and tarrage_dep:
+	if detect_fin_essai and ((sppr_rollback and recherche_deb_impact and tarrage_dep) or deb_impact_manuel):
 		impact = [True for i in range(len(F))]
 		for i in range(len(F)):
 			F[i], dep[i], tmps[i], impact[i] = fin_essai(	F=F[i],
@@ -252,11 +275,11 @@ elif superposer_courbes != None and superposer_courbes:	# Si on affiche les fich
 		else:
 			impact_text = " / Énergie totalement absobée"
 
-	elif sppr_rollback != True or recherche_deb_impact != True or tarrage_dep != True:
-		print("Les paramètres sppr_rollback, recherche_deb_impact et tarrage_dep doivent-être activés pour effectuer la détection de fin d'impact !")
+	elif (not sppr_rollback or not recherche_deb_impact or not tarrage_dep) and not deb_impact_manuel:
+		print("Les paramètres deb_impact_manuel ou sppr_rollback, recherche_deb_impact et tarrage_dep doivent-être activés pour effectuer la détection de fin d'impact !")
 
 	# Calcul de l'énergie de chaque courbes
-	if calculer_energie != None and calculer_energie:
+	if calculer_energie:
 		energie_impact = [energie(	F=F[i],
 									dep=dep[i],
 									fact_force=fact_force,
@@ -266,7 +289,7 @@ elif superposer_courbes != None and superposer_courbes:	# Si on affiche les fich
 		energie_moyenne /= len(energie_impact)
 
 	# Enregistrement des données traitées
-	if enregistrer_data != None and enregistrer_data:
+	if enregistrer_data:
 		fichiers_enregistrement = []
 		for i in range(len(fichiers)):
 			fichiers_enregistrement.append(fichiers[i].split(".")[0])
@@ -284,20 +307,21 @@ elif superposer_courbes != None and superposer_courbes:	# Si on affiche les fich
 								heure=en_tetes[i][4])
 
 	# Création des trois graphes dans une figure
-	if afficher_sep != None and afficher_sep:
+	if afficher_sep:
 		figs = [0, 0, 0]
 		axs = [0, 0, 0]
 
 		for i in range([afficher_dep_tmps, afficher_F_dep, afficher_F_tmps].count(True)):
 			figs[i], axs[i] = plt.subplots()
 
-	elif afficher_sep != None and afficher_sep == False and [afficher_dep_tmps, afficher_F_dep, afficher_F_tmps].count(True) > 0:
+	elif not afficher_sep and [afficher_dep_tmps, afficher_F_dep, afficher_F_tmps].count(True) > 0:
 		fig, axs = plt.subplots([afficher_dep_tmps, afficher_F_dep, afficher_F_tmps].count(True), 1)
 	
 	if afficher_sep != None:
+		i = 0
 		j = 0
 
-		if afficher_dep_tmps != None and afficher_dep_tmps:
+		if afficher_dep_tmps:
 			titre = ""
 
 			if calculer_energie:
@@ -326,10 +350,10 @@ elif superposer_courbes != None and superposer_courbes:	# Si on affiche les fich
 
 			i += 1
 
-		if afficher_F_tmps != None and afficher_F_tmps:
+		if afficher_F_tmps:
 			titre = ""
 
-			if afficher_dep_tmps == None or afficher_dep_tmps == False or afficher_sep:
+			if not afficher_dep_tmps or afficher_sep:
 				if calculer_energie:
 					titre = "Énergie Moyenne Calculée = " + str(round(energie_moyenne, 2)) + " J" + impact_text
 				else:
@@ -357,10 +381,10 @@ elif superposer_courbes != None and superposer_courbes:	# Si on affiche les fich
 
 			i += 1
 
-		if afficher_F_dep != None and afficher_F_dep:
+		if afficher_F_dep:
 			titre = ""
 
-			if (afficher_dep_tmps == None or afficher_dep_tmps == False) and (afficher_F_tmps == None or afficher_F_tmps == False) or afficher_sep:
+			if not afficher_dep_tmps and not afficher_F_tmps or afficher_sep:
 				if calculer_energie:
 					titre = "Énergie Moyenne Calculée = " + str(round(energie_moyenne, 2)) + " J" + impact_text
 				else:
@@ -392,7 +416,7 @@ try:
 	if afficher_sep != None:
 		i = 0
 
-		if afficher_dep_tmps != None and afficher_dep_tmps:
+		if afficher_dep_tmps:
 			if afficher_sep:
 				fig = figs[i]
 				ax = axs[i]
@@ -407,7 +431,7 @@ try:
 
 			i += 1
 
-		if afficher_F_tmps != None and afficher_F_tmps:
+		if afficher_F_tmps:
 			if afficher_sep:
 				fig = figs[i]
 				ax = axs[i]
@@ -422,7 +446,7 @@ try:
 
 			i += 1
 
-		if afficher_F_dep != None and afficher_F_dep:
+		if afficher_F_dep:
 			if afficher_sep:
 				fig = figs[i]
 				ax = axs[i]

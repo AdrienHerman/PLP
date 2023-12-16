@@ -12,8 +12,8 @@
 #: ** Si cette option est à True, nom_dossier doit-être renseigné
 #: ** Sinon, nom_fichier doit-être renseigné
 superposer_courbes:True:
-nom_fichier:DATA/EXEMPLE.CSV:
-nom_dossier:DATA/:
+nom_fichier:DATA/test.CSV:
+nom_dossier:DATA/test/:
 #:
 #: ** Calculer les données de temps de l'essai
 #: ** True = Oui / False = Non
@@ -46,9 +46,16 @@ sppr_rollback:True:
 #: ** et la variable taux_augmentation doit-être renseignée.
 #: ** Si le début de l'essai est trouvé et qu'il correspond à la position i des vecteurs
 #: ** de données, les données entre 0 et i - nb_pas_avant_augmentation sont supprimées.
-recherche_deb_impact:True:
+recherche_deb_impact:False:
 taux_augmentation:0.7:
 nb_pas_avant_augmentation:1:
+#:
+#: ** Début d'impact manuel : Paramétrage d'un temps au bout duquel le logiciel
+#: ** commençera à tracer les courbes. tmps_deb_impact doit être exprimé en (ms)
+#: ** ATTENTION : Si recherche_deb_impact = True cette option ne sera pas prise en compte !
+#: ** ATTENTION : Si deb_impact_manuel = True, calc_temps doit être activé !
+deb_impact_manuel:True:
+tmps_deb_impact:499.95:
 #:
 #: ** Le tarrage du vecteur déplacement et du vecteur temps permets d'avoir des graphes
 #: ** qui commencent à 0 ms ou 0 mm. Ces paramètres ne sont valables que si
@@ -65,7 +72,7 @@ tarrage_tmps:True:
 #: ** ATTENTION : detect_fin_essai ne peut-être activé que lorsque sppr_rollback, recherche_deb_impact
 #: ** et tarrage_dep sont activés !
 detect_fin_essai:True:
-dep_max:19:
+dep_max:19.73:
 #:
 #: ** Si calculer_energie = True, un calcul de l'énergie (intégration des données
 #: ** Force = f(Déplacement) avec la méthode de Simpson à 3 points) est effectué.

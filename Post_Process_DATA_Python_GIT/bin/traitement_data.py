@@ -260,11 +260,53 @@ def fin_essai(F=[], dep=[], tmps=[], dep_max=19.0):
 		impact = True
 
 	for i in range(len(dep)):
-		if dep[i] >= dep_max:
-			break
+		if dep[i] >= dep_max:	break
 
 	del F[i:]
 	del dep[i:]
 	if tmps != []:	del tmps[i:]
 
 	return F, dep, tmps, impact
+
+def debut_impact_manuel(F=[], dep=[], tmps=[], tmps_deb_impact=5.0):
+	"""
+	Suppression des données force, déplacement et temps antérieurs
+	au temps tmps_deb_impact exprimé en ms.
+
+	-----------
+	Variables :
+		- F : Vecteur force
+		- dep : Vecteur déplacement
+		- tmps : Vecteur temps (ms)
+		- tmps_deb_impact : Temps avant le début de l'impact (ms)
+	-----------
+	"""
+
+	if type(F) != list or type(dep) != list or type(tmps) != list or type(tmps_deb_impact) != float:
+		print("debut_impact_manuel\nLes types des arguments ne sont pas correctes.\n     type(F)={0}\n     type(dep)={1}\n     type(tmps)={2}\n     type(tmps_deb_impact)={3}".format(type(F), type(dep), type(tmps), type(tmps_deb_impact)))
+
+		return [], [], []
+
+	if len(F) == 0 and (len(F) != len(dep) or len(dep) != len(tmps)):
+		print("debut_impact_manuel\nLes vecteurs d'entrée doivent-être de même longueur et non vides !")
+
+		return [], [], []
+
+	if tmps_deb_impact <= .0:
+		print("debut_impact_manuel\ntmps_deb_impact doit être positif strictement !\n     tmps_deb_impact = {0}".format(tmps_deb_impact))
+
+		return F, dep, tmps
+
+	i = 0
+
+	while tmps[i] < tmps_deb_impact:
+		i += 1
+
+	if i < len(tmps) - 1:
+		del F[:i]
+		del dep[:i]
+		del tmps[:i]
+	else:
+		print("debut_impact_manuel\nLe vecteur temps ne contient pas de temps supérieurs à tmps_deb_impact !\n     tmps_deb_impact = {0}".format(tmps_deb_impact))
+
+	return F, dep, tmps

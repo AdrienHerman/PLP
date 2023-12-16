@@ -43,6 +43,8 @@ def lecture_param(path_config="config.txt"):
 	dossier_enregistrement = None
 	sppr_rollback = None
 	recherche_deb_impact = None
+	deb_impact_manuel = None
+	tmps_deb_impact = None
 	tarrage_dep = None
 	tarrage_tmps = None
 	detect_fin_essai = None
@@ -98,6 +100,16 @@ def lecture_param(path_config="config.txt"):
 			if lignes[i][1] == "False":		recherche_deb_impact = False
 			elif lignes[i][1] == "True":	recherche_deb_impact = True
 			else:	print("lecture_param\nCommande inconnue pour recherche_deb_impact")
+		elif lignes[i][0] == "deb_impact_manuel":
+			if lignes[i][1] == "False":		deb_impact_manuel = False
+			elif lignes[i][1] == "True":	deb_impact_manuel = True
+			else:	print("lecture_param\nCommande inconnue pour deb_impact_manuel")
+		elif lignes[i][0] == "tmps_deb_impact":
+			try:
+				tmps_deb_impact = float(lignes[i][1])
+			except:
+				print("""	lecture_param\nLe type de données entrée dans tmps_deb_impact n'est pas correct !
+							\n     tmps_deb_impact={0}""".format(lignes[i][1]))
 		elif lignes[i][0] == "tarrage_dep":
 			if lignes[i][1] == "False":		tarrage_dep = False
 			elif lignes[i][1] == "True":	tarrage_dep = True
@@ -179,6 +191,10 @@ def lecture_param(path_config="config.txt"):
 		print("lecture_param\nsppr_rollback est non défini")
 	elif recherche_deb_impact == None:
 		print("lecture_param\nrecherche_deb_impact est non défini")
+	elif deb_impact_manuel == None:
+		print("lecture_param\ndeb_impact_manuel est non défini")
+	elif tmps_deb_impact == None:
+		print("lecture_param\ntmps_deb_impact est non défini")
 	elif tarrage_dep == None:
 		print("lecture_param\ntarrage_dep est non défini")
 	elif tarrage_tmps == None:
@@ -215,6 +231,8 @@ def lecture_param(path_config="config.txt"):
 				dossier_enregistrement,
 				sppr_rollback,
 				recherche_deb_impact,
+				deb_impact_manuel,
+				tmps_deb_impact,
 				tarrage_dep,
 				tarrage_tmps,
 				detect_fin_essai,
