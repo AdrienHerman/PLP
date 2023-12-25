@@ -56,6 +56,8 @@ def lire_fichier_txt_python(filePath=None):
 		- file : Objet fichier
 		- lignes : Liste contenant toutes les lignes du fichier
 	-----------
+
+	Retours : Vecteur Force, Vecteur Déplacement, Vecteur Temps, Temps d'Échantillonnage, Unité Force, Unité Déplacement
 	"""
 	F = []
 	dep = []
@@ -70,34 +72,36 @@ def lire_fichier_txt_python(filePath=None):
 			lignes[i] = lignes[i].split(',')
 
 		if len(lignes[3]) == 3:	# Les données de temps sont enregistrées
-			try:
-				for i in range(3, len(lignes)):
-					F.append(float(lignes[i][0]))
-					dep.append(float(lignes[i][1]))
-					tmps.append(float(lignes[i][2]))
+				try:
+					for i in range(4, len(lignes)):
+						F.append(float(lignes[i][0]))
+						dep.append(float(lignes[i][1]))
+						tmps.append(float(lignes[i][2]))
 
-				return F, dep, tmps, lignes[0], lignes[1], lignes[2]
+					return F, dep, tmps, lignes[3][0], lignes[3][1], float(lignes[2][0].split("\n")[0]), lignes[1][0], lignes[2][0]
 
-			except:
-				print("lire_fichier_txt_python\nLe fichier n'a pas une mise en forme correcte ou ses données ne sont pas au bon format")
+				except:
+					print("lire_fichier_txt_python\nLe fichier n'a pas une mise en forme correcte ou ses données ne sont pas au bon format")
 
-				return [], [], [], "", "", .0
+					return [], [], [], "", "", .0, "", ""
+	
 		else:					# Les données de temps ne sont pas enregistrées
 			try:
-				for i in range(3, len(lignes)):
+				for i in range(4, len(lignes)):
 					F.append(float(lignes[i][0]))
 					dep.append(float(lignes[i][1]))
 
-				return F, dep, [], lignes[0], lignes[1], lignes[2]
+				return F, dep, [], lignes[3][0], lignes[3][1], float(lignes[2][0].split("\n")[0]), lignes[1][0], lignes[2][0]
 
 			except:
 				print("lire_fichier_txt_python\nLe fichier n'a pas une mise en forme correcte ou ses données ne sont pas au bon format")
 
-				return [], [], [], "", "", .0
+				return [], [], [], "", "", .0, "", ""
+	
 	except:
 		print("lire_fichier_txt_python\nImpossible de lire le fichier :\n     filePath={0}".format(filePath))
 
-		return []
+		return [], [], [], "", "", .0, "", ""
 
 def lire_en_tete_csv_oscilo(lignes=[]):
 	"""

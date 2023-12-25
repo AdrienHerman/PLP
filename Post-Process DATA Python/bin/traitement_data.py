@@ -5,7 +5,7 @@ HERMAN Adrien
 """
 
 # Modules de Python
-import scipy
+from scipy import integrate
 
 def suppr_rollback(F=[], dep=[], tmps=[]):
 	"""
@@ -169,7 +169,7 @@ def energie(F=[], dep=[], fact_force=1, fact_dep=1e-3):
 	dep_corrige = dep.copy()
 	for i in range(len(dep_corrige)):	dep_corrige[i] *= fact_dep
 	
-	return scipy.integrate.simps(F_corrige, dep_corrige)
+	return integrate.trapezoid(F_corrige, dep_corrige)
 
 def tare_dep(dep=[]):
 	"""
@@ -260,11 +260,66 @@ def fin_essai(F=[], dep=[], tmps=[], dep_max=19.0):
 		impact = True
 
 	for i in range(len(dep)):
-		if dep[i] >= dep_max:
-			break
+		if dep[i] >= dep_max:	break
 
 	del F[i:]
 	del dep[i:]
 	if tmps != []:	del tmps[i:]
 
 	return F, dep, tmps, impact
+
+def debut_impact_manuel(F=[], dep=[], tmps=[], tmps_deb_impact=5.0):
+	"""
+	Suppression des données force, déplacement et temps antérieurs
+	au temps tmps_deb_impact exprimé en ms.
+
+	-----------
+	Variables :
+		- F : Vecteur force
+		- dep : Vecteur déplacement
+		- tmps : Vecteur temps (ms)
+		- tmps_deb_impact : Temps avant le début de l'impact (ms)
+	-----------
+	"""
+
+	if type(F) != list or type(dep) != list or type(tmps) != list or type(tmps_deb_impact) != float:
+		print("debut_impact_manuel\nLes types des arguments ne sont pas correctes.\n     type(F)={0}\n     type(dep)={1}\n     type(tmps)={2}\n     type(tmps_deb_impact)={3}".format(type(F), type(dep), type(tmps), type(tmps_deb_impact)))
+
+		return [], [], []
+
+	if len(F) == 0 and (len(F) != len(dep) or len(dep) != len(tmps)):
+		print("debut_impact_manuel\nLes vecteurs d'entrée doivent-être de même longueur et non vides !")
+
+		return [], [], []
+
+	if tmps_deb_impact <= .0:
+		print("debut_impact_manuel\ntmps_deb_impact doit être positif strictement !\n     tmps_deb_impact = {0}".format(tmps_deb_impact))
+
+		return F, dep, tmps
+
+	i = 0
+
+	while tmps[i] < tmps_deb_impact and i < len(tmps) - 1:
+		i += 1
+
+	if i < len(tmps) - 1:
+		del F[:i]
+		del dep[:i]
+		del tmps[:i]
+	else:
+		print("debut_impact_manuel\nLe vecteur temps ne contient pas de temps supérieurs à tmps_deb_impact !\n     tmps_deb_impact = {0}".format(tmps_deb_impact))
+
+	return F, dep, tmps
+
+def calc_vitesse(dep1=None, dep2=None, tmps1=None, tmps2=None):
+	"""
+	Calcul de la vitesse d'impact en fonction de deux points.
+
+	-----------
+	Variables :
+		- dep1, dep2 : Déplacement
+		- tmps1, tmps2 : Temps
+	-----------
+	"""
+
+	return (dep1 - dep2) / (tmps1 - tmps2)
