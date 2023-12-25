@@ -34,6 +34,7 @@ def lecture_param(path_config="config.txt"):
 			return []
 
 	# Variables
+	type_fichier = None
 	superposer_courbes = None
 	nom_fichier = None
 	nom_dossier = None
@@ -72,7 +73,11 @@ def lecture_param(path_config="config.txt"):
 	for i in range(len(lignes)):
 		if lignes[i][0] == "#":	continue
 		
-		if lignes[i][0] == "superposer_courbes":
+		if lignes[i][0] == "type_fichier":
+			if lignes[i][1].lower() == "txt":	type_fichier = "txt"
+			elif lignes[i][1].lower() == "csv":	type_fichier = "csv"
+			else:	print("lecture_param\nCommande inconnue pour type_fichier")
+		elif lignes[i][0] == "superposer_courbes":
 			if lignes[i][1] == "False":		superposer_courbes = False
 			elif lignes[i][1] == "True":	superposer_courbes = True
 			else:	print("lecture_param\nCommande inconnue pour superposer_courbes")
@@ -173,7 +178,9 @@ def lecture_param(path_config="config.txt"):
 			elif lignes[i][1] == "True":	afficher_sep = True
 			else:	print("lecture_param\nCommande inconnue pour afficher_sep")
 
-	if superposer_courbes == None:
+	if type_fichier == None:
+		print("lecture_param\ntype_fichier est non défini")
+	elif superposer_courbes == None:
 		print("lecture_param\nsuperposer_courbes est non défini")
 	elif nom_fichier == None:
 		print("lecture_param\nnom_fichier est non défini")
@@ -222,7 +229,8 @@ def lecture_param(path_config="config.txt"):
 	elif afficher_sep == None:
 		print("lecture_param\nafficher_sep est non défini")
 
-	return 	[	superposer_courbes,
+	return 	[	type_fichier,
+				superposer_courbes,
 				nom_fichier,
 				nom_dossier,
 				calc_temps,

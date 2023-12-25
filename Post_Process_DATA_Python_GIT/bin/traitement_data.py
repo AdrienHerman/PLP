@@ -5,7 +5,7 @@ HERMAN Adrien
 """
 
 # Modules de Python
-import scipy
+from scipy import integrate
 
 def suppr_rollback(F=[], dep=[], tmps=[]):
 	"""
@@ -169,7 +169,7 @@ def energie(F=[], dep=[], fact_force=1, fact_dep=1e-3):
 	dep_corrige = dep.copy()
 	for i in range(len(dep_corrige)):	dep_corrige[i] *= fact_dep
 	
-	return scipy.integrate.simps(F_corrige, dep_corrige)
+	return integrate.trapezoid(F_corrige, dep_corrige)
 
 def tare_dep(dep=[]):
 	"""
@@ -299,7 +299,7 @@ def debut_impact_manuel(F=[], dep=[], tmps=[], tmps_deb_impact=5.0):
 
 	i = 0
 
-	while tmps[i] < tmps_deb_impact:
+	while tmps[i] < tmps_deb_impact and i < len(tmps) - 1:
 		i += 1
 
 	if i < len(tmps) - 1:
