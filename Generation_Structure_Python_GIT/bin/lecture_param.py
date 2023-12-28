@@ -48,7 +48,8 @@ def lecture_param(path_config="config.txt", debug=True):
 	gen_losange_basic = None
 	gen_losange_grad = None
 	gen_hex_tri1_2D_aligne_basic = None
-	gen_func = [None for i in range(3)]
+	gen_hex_tri1_2D_aligne_grad = None
+	gen_func = [None for i in range(4)]
 	#	Géométrie générale
 	generation_plateaux_extremitees = None
 	ep_plateau_dessous = None
@@ -79,6 +80,7 @@ def lecture_param(path_config="config.txt", debug=True):
 	ep_plateaux = None
 	#	Géométrie Hexagones + Triangles 1 2D (Alignés ou Non / Avec ou sans gradients)
 	alpha_hex_tri1_2D = None
+	alpha_hex_tri1_2D_grad = None
 	#	Partie exploitation du modèle 3D
 	extrude = None 
 	export = None 
@@ -145,6 +147,16 @@ def lecture_param(path_config="config.txt", debug=True):
 			else:
 				if debug:
 					log += "lecture_param\nCommande inconnue pour gen_hex_tri1_2D_aligne_basic\n"
+		elif lignes[i][0] == "gen_hex_tri1_2D_aligne_grad":
+			if lignes[i][1] == "False":
+				gen_hex_tri1_2D_aligne_grad = False
+				gen_func[3] = False
+			elif lignes[i][1] == "True":
+				gen_hex_tri1_2D_aligne_grad = True
+				gen_func[3] = True
+			else:
+				if debug:
+					log += "lecture_param\nCommande inconnue pour gen_hex_tri1_2D_aligne_grad\n"
 
 		# Géométrie
 		if lignes[i][0] == "generation_plateaux_extremitees":
@@ -327,6 +339,13 @@ def lecture_param(path_config="config.txt", debug=True):
 				if debug:
 					log += """	lecture_param\nLe type de données entrée dans alpha_hex_tri1_2D n'est pas correct !
 									\n     alpha_hex_tri1_2D={0}\n""".format(lignes[i][1])
+		elif lignes[i][0] == "alpha_hex_tri1_2D_grad":
+			try:
+				alpha_hex_tri1_2D_grad = [float(lignes[i][1].split(',')[j]) for j in range(len(lignes[i][1].split(',')))]
+			except:
+				if debug:
+					log += """	lecture_param\nLe type de données entrée dans alpha_hex_tri1_2D_grad n'est pas correct !
+									\n     alpha_hex_tri1_2D_grad={0}\n""".format(lignes[i][1])
 
 		# Partie exploitation du modèle 3D
 		if lignes[i][0] == "extrude":
@@ -373,6 +392,7 @@ def lecture_param(path_config="config.txt", debug=True):
 				gen_losange_basic,
 				gen_losange_grad,
 				gen_hex_tri1_2D_aligne_basic,
+				gen_hex_tri1_2D_aligne_grad,
 				generation_plateaux_extremitees,
 				[ep_plateau_dessous, ep_plateau_dessus],
 				ep,
@@ -397,6 +417,7 @@ def lecture_param(path_config="config.txt", debug=True):
 				ep_par_couche,
 				ep_plateaux,
 				alpha_hex_tri1_2D,
+				alpha_hex_tri1_2D_grad,
 				extrude,
 				export,
 				export_name,
@@ -498,8 +519,8 @@ def lecture_param(path_config="config.txt", debug=True):
 		return_nok.append(log)
 		return return_nok
 
-	# 	Traitement des variables concernant les éométrie sans gradients
-	if gen_losange_basic == True:
+	# 	Traitement des variables concernant les géométrie sans gradients
+	if gen_losange_basic or gen_hex_tri1_2D_aligne_basic:
 		if nb_motif_x_sg == None:
 			if debug:
 				log += "lecture_param\nnb_motif_x_sg n'est pas définie !\n"
@@ -512,7 +533,7 @@ def lecture_param(path_config="config.txt", debug=True):
 			return return_nok
 
 	# Géométries avec gradients
-	if gen_losange_grad == True:
+	if gen_losange_grad or gen_hex_tri1_2D_aligne_grad:
 		if nb_y_par_couche == None:
 			if debug:
 				log += "lecture_param\nnb_y_par_couche n'est pas définie !\n"
@@ -573,11 +594,19 @@ def lecture_param(path_config="config.txt", debug=True):
 			return_nok.append(log)
 			return return_nok
 
-	# Géométrie Hexagones + Triangles 1 2D (Alignés ou Non / Avec ou sans gradients)
-	if alpha_hex_tri1_2D == True:
+	# Géométrie Hexagones + Triangles 1 2D (Alignés ou Non Sans gradients)
+	if gen_hex_tri1_2D_aligne_basic:
 		if alpha_hex_tri1_2D == None:
 			if debug:
 				log += "lecture_param\nalpha_hex_tri1_2D n'est pas définie !\n"
+			return_nok.append(log)
+			return return_nok
+
+	# Géométrie Hexagones + Triangles 1 2D (Alignés ou Non Avec gradients)
+	if gen_hex_tri1_2D_aligne_grad:
+		if alpha_hex_tri1_2D_grad == None:
+			if debug:
+				log += "lecture_param\nalpha_hex_tri1_2D_grad n'est pas définie !\n"
 			return_nok.append(log)
 			return return_nok
 

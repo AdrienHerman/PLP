@@ -10,7 +10,7 @@ from PySide import QtGui
 import FreeCADGui, ImportGui, Part, Sketcher, math, os, sys, time
 
 # Modules du Logiciel
-path_soft = "/home/adrien/Documents/Shadow Drive/INSA 5A/PLP/Python/dev/Generation_Structure_Python_GIT/"
+path_soft = "/home/adrienherman/Documents/Shadow Drive/INSA 5A/PLP/Python/dev/Generation_Structure_Python_GIT/"
 sys.path.append(path_soft + "bin/")
 sys.path.append(path_soft + "bin/losange/")
 from lecture_param import *
@@ -21,12 +21,14 @@ from debug import *
 from losange.losange import *
 from losange.losange_grad import *
 from hexagone_triangle1_2D.hex_tri1_2D import *
+from hexagone_triangle1_2D.hex_tri1_2D_grad import *
 
 # Lecture des parmaètres du programme
 [	lecture_param_ok,
 	gen_losange_basic,
 	gen_losange_grad,
 	gen_hex_tri1_2D_aligne_basic,
+	gen_hex_tri1_2D_aligne_grad,
 	generation_plateaux_extremitees,
 	ep_plateaux_extremitees,
 	ep,
@@ -51,6 +53,7 @@ from hexagone_triangle1_2D.hex_tri1_2D import *
 	ep_par_couche,
 	ep_plateaux,
 	alpha_hex_tri1_2D,
+	alpha_hex_tri1_2D_grad,
 	extrude,
 	export,
 	export_name,
@@ -62,6 +65,7 @@ from hexagone_triangle1_2D.hex_tri1_2D import *
 	log] = lecture_param(path_soft + "config.txt")
 
 # Création du fichier de débogage & écriture des log de la fonction lecture_param
+if not debug_current_folder:	debug_current_folder = "log"
 file_debug = create_file_debug(path_soft + debug_current_folder)
 wdebug(log, file_debug)
 
@@ -121,76 +125,6 @@ if lecture_param_ok:
 				generation_plateaux_extremitees,
 				wdebug)
 
-	elif gen_losange_grad:
-		# Création des listes pour les plateaux
-		plateaux = []
-		if generation_plateaux_extremitees:	plateaux.append(ep_plateaux_extremitees[0])
-		plateaux += ep_plateaux
-		if generation_plateaux_extremitees:	plateaux.append(ep_plateaux_extremitees[1])
-
-		# Création des listes pour les noms des objets
-		nb_couches = len(nb_y_par_couche)
-		nom_sketch_par_couche = ["Sketch_Losange" + str(i + 1) for i in range(nb_couches)]
-		nom_pad_par_couche = ["Pad_Losange" + str(i + 1) for i in range(nb_couches)]
-		nom_sketch_plateaux = ["Sketch_Plateaux" + str(i + 1) for i in range(nb_couches + 1)]
-		nom_pad_plateaux = ["Pad_Plateaux" + str(i + 1) for i in range(nb_couches + 1)]
-
-		# Dimensions de chaques couches
-		if dimlat_par_couche_manuel:
-			dimlat_y = 0
-			for dimlat in dimlat_par_couche:	dimlat_y += dimlat
-
-		else:
-			nb_losange_y = 0
-			print(nb_y_par_couche)
-			for nb_losange in nb_y_par_couche:	nb_losange_y += nb_losange
-			dimlat_par_couche = [nb_y_par_couche[i] / nb_losange_y * dimlat_y for i in range(nb_couches)]
-
-
-		masse, pas_final, ep_finale, porosite = opti_masse(	
-				doc,
-				"Body_Losange",
-				nom_pad_par_couche,
-				nom_pad_plateaux,
-				nom_sketch_par_couche,
-				nom_sketch_plateaux,
-				grad_ep,
-				file_debug,
-				wdebug,
-				debug,
-				tolerance,
-				nb_pas_max,
-				[0 for i in range(nb_pas_max)],
-				ep,
-				0,
-				correction_ep_par_pas,
-				pourcentage_modification_correction,
-				seuil_augmentation_correction,
-				seuil_diminution_correction,
-				objectif_masse,
-				rho,
-				volume_max,
-				nb_couches,
-				nb_y_par_couche,
-				dimlat_par_couche,
-				ep_par_couche,
-				nom_sketch_par_couche,
-				nom_pad_par_couche,
-				dimlat_x,
-				dimlat_ep,
-				nb_x_par_couche,
-				nom_sketch_plateaux,
-				nom_pad_plateaux,
-				"Body_Losange",
-				plateaux,
-				gen_plateaux,
-				gen_losange,
-				sketch_visible,
-				extrude,
-				semi_debug,
-				debug,
-				wdebug)
-
 	elif gen_hex_tri1_2D_aligne_basic:
 		masse, pas_final, ep_finale, porosite = opti_masse(	
 				doc,
@@ -234,6 +168,121 @@ if lecture_param_ok:
 				gen_plateaux,
 				generation_plateaux_extremitees,
 				wdebug)
+
+	elif gen_losange_grad or gen_hex_tri1_2D_aligne_grad:
+		# Création des listes pour les plateaux
+		plateaux = []
+		if generation_plateaux_extremitees:	plateaux.append(ep_plateaux_extremitees[0])
+		plateaux += ep_plateaux
+		if generation_plateaux_extremitees:	plateaux.append(ep_plateaux_extremitees[1])
+
+		# Création des listes pour les noms des objets
+		nb_couches = len(nb_y_par_couche)
+		nom_sketch_par_couche = ["Sketch_Losange" + str(i + 1) for i in range(nb_couches)]
+		nom_pad_par_couche = ["Pad_Losange" + str(i + 1) for i in range(nb_couches)]
+		nom_sketch_plateaux = ["Sketch_Plateaux" + str(i + 1) for i in range(nb_couches + 1)]
+		nom_pad_plateaux = ["Pad_Plateaux" + str(i + 1) for i in range(nb_couches + 1)]
+
+		# Dimensions de chaques couches
+		if dimlat_par_couche_manuel:
+			dimlat_y = 0
+			for dimlat in dimlat_par_couche:	dimlat_y += dimlat
+
+		else:
+			nb_losange_y = 0
+			for nb_losange in nb_y_par_couche:	nb_losange_y += nb_losange
+			dimlat_par_couche = [nb_y_par_couche[i] / nb_losange_y * dimlat_y for i in range(nb_couches)]
+
+		if gen_losange_grad:
+			masse, pas_final, ep_finale, porosite = opti_masse(	
+					doc,
+					"Body_Losange",
+					nom_pad_par_couche,
+					nom_pad_plateaux,
+					nom_sketch_par_couche,
+					nom_sketch_plateaux,
+					losange_grad,
+					file_debug,
+					wdebug,
+					debug,
+					tolerance,
+					nb_pas_max,
+					[0 for i in range(nb_pas_max)],
+					ep,
+					0,
+					correction_ep_par_pas,
+					pourcentage_modification_correction,
+					seuil_augmentation_correction,
+					seuil_diminution_correction,
+					objectif_masse,
+					rho,
+					volume_max,
+					nb_couches,
+					nb_y_par_couche,
+					dimlat_par_couche,
+					ep_par_couche,
+					nom_sketch_par_couche,
+					nom_pad_par_couche,
+					dimlat_x,
+					dimlat_ep,
+					nb_x_par_couche,
+					nom_sketch_plateaux,
+					nom_pad_plateaux,
+					"Body_Losange",
+					plateaux,
+					gen_plateaux,
+					gen_losange,
+					sketch_visible,
+					extrude,
+					semi_debug,
+					debug,
+					wdebug)
+
+		elif gen_hex_tri1_2D_aligne_grad:
+			masse, pas_final, ep_finale, porosite = opti_masse(	
+					doc,
+					"Body_Hex_Tri",
+					nom_pad_par_couche,
+					nom_pad_plateaux,
+					nom_sketch_par_couche,
+					nom_sketch_plateaux,
+					gen_hex_tri1_2D_aligne_grad_func,
+					file_debug,
+					wdebug,
+					debug,
+					tolerance,
+					nb_pas_max,
+					[0 for i in range(nb_pas_max)],
+					ep,
+					0,
+					correction_ep_par_pas,
+					pourcentage_modification_correction,
+					seuil_augmentation_correction,
+					seuil_diminution_correction,
+					objectif_masse,
+					rho,
+					volume_max,
+					nb_couches,
+					nb_x_par_couche,
+					nb_y_par_couche,
+					alpha_hex_tri1_2D_grad,
+					dimlat_x,
+					dimlat_par_couche,
+					dimlat_ep,
+					ep_par_couche,
+					plateaux,
+					semi_debug,
+					debug,
+					sketch_visible,
+					extrude,
+					nom_sketch_par_couche,
+					nom_sketch_plateaux,
+					"Body_Hex_Tri",
+					nom_pad_par_couche,
+					nom_pad_plateaux,
+					gen_plateaux,
+					gen_hex_tri1_2D_aligne,
+					wdebug)
 
 	# Affichage du graphe de convergeance
 	affichage_calculs_masse(masse, objectif_masse, tolerance, pas_final, ep_finale, porosite, file_debug)

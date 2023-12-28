@@ -31,27 +31,27 @@ def gen_losange(	ep=0.4,
 
 	-----------
 	Variables :
-		ep -> Épaisseur des parois de la structure lattice
-		doc -> Document FreeCAD (Attention il s'agit de l'objet document, il doit-être ouvert)
-		file_debug -> Fichier de déboggage (ouvert)
-		nb_losange_x / nb_losange_y -> Nombre de losanges sur la distance x / y
-		dimlat_ep -> Épaisseur d'extrusion de la structure lattice
-		dimlat_x / dimlat_y -> Dimensions de la zone de construction
-		ep_plateaux -> Épaisseur des plateaux liant les extrémités de la structure (dans le sens de chargement)
+		- ep -> Épaisseur des parois de la structure lattice
+		- doc -> Document FreeCAD (Attention il s'agit de l'objet document, il doit-être ouvert)
+		- file_debug -> Fichier de déboggage (ouvert)
+		- nb_losange_x / nb_losange_y -> Nombre de losanges sur la distance x / y
+		- dimlat_ep -> Épaisseur d'extrusion de la structure lattice
+		- dimlat_x / dimlat_y -> Dimensions de la zone de construction
+		- ep_plateaux -> Épaisseur des plateaux liant les extrémités de la structure (dans le sens de chargement)
 					   [Épaisseur du plateau du dessous, Épaisseur du plateau du dessus]
-		semi_debug -> Tracer les lignes de construction
-		debug -> Afficher les actions dans le terminal et dans le fichier de déboggage
-		sketch_visible -> Afficher l'esquisse de départ après l'extrusion = True
-		extrude -> Réaliser l'extrusion = True
-		nom_sketch_losange -> Nom de l'esquisse du losange
-		nom_sketch_plateaux_extremitees -> Nom des esquisses de définition des plateaux
-		nom_body_losange -> Nom de la pièce
-		nom_pad_losange -> Nom du pad du losange
-		nom_pad_plateau -> Nom des pad des plateaux liant les parties hautes et basses de la structure
-		gen_plateaux -> Fonction de génération des plateaux liant les deux extrémités
-		generation_plateaux_extremitees -> True = Les plateaux aux extrémités sont générés, False = Génération des plateaux ignorés
-		wdebug -> Fonction d'écriture des informations de débogage dans le terminal et dans le fichier log
-		sketch -> Objet contenant l'esquisse de la structure losange
+		- semi_debug -> Tracer les lignes de construction
+		- debug -> Afficher les actions dans le terminal et dans le fichier de déboggage
+		- sketch_visible -> Afficher l'esquisse de départ après l'extrusion = True
+		- extrude -> Réaliser l'extrusion = True
+		- nom_sketch_losange -> Nom de l'esquisse du losange
+		- nom_sketch_plateaux_extremitees -> Nom des esquisses de définition des plateaux
+		- nom_body_losange -> Nom de la pièce
+		- nom_pad_losange -> Nom du pad du losange
+		- nom_pad_plateau -> Nom des pad des plateaux liant les parties hautes et basses de la structure
+		- gen_plateaux -> Fonction de génération des plateaux liant les deux extrémités
+		- generation_plateaux_extremitees -> True = Les plateaux aux extrémités sont générés, False = Génération des plateaux ignorés
+		- wdebug -> Fonction d'écriture des informations de débogage dans le terminal et dans le fichier log
+		- sketch -> Objet contenant l'esquisse de la structure losange
 	-----------
 	"""
 
