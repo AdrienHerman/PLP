@@ -6,6 +6,7 @@ HERMAN Adrien
 
 # Modules de Python
 import matplotlib.pyplot as plt
+from statistics import mean
 
 # Modules du Logiciel
 from bin.lecture_param import *
@@ -35,10 +36,14 @@ from bin.traitement_data import *
 	fact_dep,
 	taux_augmentation,
 	nb_pas_avant_augmentation,
+	calc_vitesse_impact,
+	nbpts_vitesse_impact,
 	afficher_dep_tmps,
 	afficher_F_tmps,
 	afficher_F_dep,
 	afficher_sep] = lecture_param()
+
+tmps_max_vitess_impact = 0.4 	# (ms) Temps maximal avant avertissement pour le calcul de la vitesse d'impact
 
 if not superposer_courbes:	# Si on affiche qu'un seul fichier de données
 	if type_fichier == "csv":
@@ -140,6 +145,14 @@ if not superposer_courbes:	# Si on affiche qu'un seul fichier de données
 	elif type_fichier == "txt":
 		print("L'enregistrement des données traitées ne peut pas être réalisée si ces données proviennent d'un fichier déjà traité (.txt)")
 
+	# Calcul de la vitesse d'impact au début de l'essai
+	if calc_vitesse_impact:
+		vitesse_impact = mean([calc_vitesse(dep1=dep[i], dep2=dep[i+1], tmps1=tmps[i], tmps2=tmps[i+1]) for i in range(nbpts_vitesse_impact)])
+
+		# Afficher un avertissement si la vitesse d'impact est calculée trop loin dans le temps de l'essai
+		if tmps[nbpts_vitesse_impact] >= tmps_max_vitess_impact:
+			print("ATTENTION : La vitesse d'impact est calculée jusqu'à un temps élevé de l'essai !\n     tmps={0} >= {1}".format(tmps[nbpts_vitesse_impact], tmps_max_vitess_impact))
+
 	# Création des trois graphes dans une figure
 	if afficher_sep:
 		figs = [0, 0, 0]
@@ -164,12 +177,16 @@ if not superposer_courbes:	# Si on affiche qu'un seul fichier de données
 				else:
 					ax = axs[i]
 
+			# Titre du graphique
 			titre = ""
 			
 			if calculer_energie:
 				titre = "Énergie Calculée = " + str(round(energie_impact, 2)) + " J" + impact_text
-			else:
-				titre = "Énergie Calculée = Désactivé" + impact_text
+
+			if calc_vitesse_impact:
+				if titre != "":	titre += " / "
+
+				titre += "Vitesse Impact = " + str(round(vitesse_impact, 2)) + "m/s"
 
 			graphe(	data_x=[tmps],
 					data_y=[dep],
@@ -194,10 +211,16 @@ if not superposer_courbes:	# Si on affiche qu'un seul fichier de données
 			titre = ""
 
 			if (afficher_dep_tmps == None or not afficher_dep_tmps) or afficher_sep:
+				# Titre du graphique
+				titre = ""
+				
 				if calculer_energie:
 					titre = "Énergie Calculée = " + str(round(energie_impact, 2)) + " J" + impact_text
-				else:
-					titre = "Énergie Calculée = Désactivé" + impact_text
+
+				if calc_vitesse_impact:
+					if titre != "":	titre += " / "
+
+					titre += "Vitesse Impact = " + str(round(vitesse_impact, 2)) + "m/s"
 
 			graphe(	data_x=[tmps],
 					data_y=[F],
@@ -222,10 +245,16 @@ if not superposer_courbes:	# Si on affiche qu'un seul fichier de données
 			titre = ""
 
 			if ((afficher_dep_tmps == None or not afficher_dep_tmps) and (afficher_F_tmps == None or not afficher_F_tmps)) or afficher_sep:
+				# Titre du graphique
+				titre = ""
+				
 				if calculer_energie:
 					titre = "Énergie Calculée = " + str(round(energie_impact, 2)) + " J" + impact_text
-				else:
-					titre = "Énergie Calculée = Désactivé" + impact_text
+
+				if calc_vitesse_impact:
+					if titre != "":	titre += " / "
+
+					titre += "Vitesse Impact = " + str(round(vitesse_impact, 2)) + "m/s"
 
 			graphe(	data_x=[dep],
 					data_y=[F],
@@ -370,6 +399,15 @@ elif superposer_courbes:	# Si on affiche les fichiers de données d'un dossier
 									date=en_tetes[i][3],
 									heure=en_tetes[i][4])
 
+		# Calcul de la vitesse d'impact au début de l'essai
+		if calc_vitesse_impact:
+			vitesse_impact_moyenne = mean([mean([calc_vitesse(dep1=dep[j][i], dep2=dep[j][i+1], tmps1=tmps[j][i], tmps2=tmps[j][i+1]) for i in range(nbpts_vitesse_impact)]) for j in range(nb_fichiers)])
+
+			# Afficher un avertissement si la vitesse d'impact est calculée trop loin dans le temps de l'essai
+			for j in range(nb_fichiers):
+				if tmps[j][nbpts_vitesse_impact] >= tmps_max_vitess_impact:
+					print("ATTENTION : La vitesse d'impact est calculée jusqu'à un temps élevé de l'essai !\n     tmps={0} >= {1}".format(tmps[j][nbpts_vitesse_impact], tmps_max_vitess_impact))
+
 		# Création des trois graphes dans une figure
 		if afficher_sep:
 			figs = [0, 0, 0]
@@ -386,12 +424,16 @@ elif superposer_courbes:	# Si on affiche les fichiers de données d'un dossier
 			j = 0
 
 			if afficher_dep_tmps:
+				# Titre du graphique
 				titre = ""
-
+				
 				if calculer_energie:
-					titre = "Énergie Moyenne Calculée = " + str(round(energie_moyenne, 2)) + " J" + impact_text
-				else:
-					titre = "Énergie Calculée = Désactivé" + impact_text
+					titre = "Énergie Calculée = " + str(round(energie_moyenne, 2)) + " J" + impact_text
+
+				if calc_vitesse_impact:
+					if titre != "":	titre += " / "
+
+					titre += "Vitesse Impact = " + str(round(vitesse_impact_moyenne, 2)) + "m/s"
 
 				if afficher_sep:
 					fig = figs[i]
@@ -418,10 +460,16 @@ elif superposer_courbes:	# Si on affiche les fichiers de données d'un dossier
 				titre = ""
 
 				if not afficher_dep_tmps or afficher_sep:
+					# Titre du graphique
+					titre = ""
+					
 					if calculer_energie:
-						titre = "Énergie Moyenne Calculée = " + str(round(energie_moyenne, 2)) + " J" + impact_text
-					else:
-						titre = "Énergie Calculée = Désactivé" + impact_text
+						titre = "Énergie Calculée = " + str(round(energie_moyenne, 2)) + " J" + impact_text
+
+					if calc_vitesse_impact:
+						if titre != "":	titre += " / "
+
+						titre += "Vitesse Impact = " + str(round(vitesse_impact_moyenne, 2)) + "m/s"
 				else:
 					titre = ""
 
@@ -449,10 +497,16 @@ elif superposer_courbes:	# Si on affiche les fichiers de données d'un dossier
 				titre = ""
 
 				if not afficher_dep_tmps and not afficher_F_tmps or afficher_sep:
+					# Titre du graphique
+					titre = ""
+					
 					if calculer_energie:
-						titre = "Énergie Moyenne Calculée = " + str(round(energie_moyenne, 2)) + " J" + impact_text
-					else:
-						titre = "Énergie Calculée = Désactivé" + impact_text
+						titre = "Énergie Calculée = " + str(round(energie_moyenne, 2)) + " J" + impact_text
+
+					if calc_vitesse_impact:
+						if titre != "":	titre += " / "
+
+						titre += "Vitesse Impact = " + str(round(vitesse_impact_moyenne, 2)) + "m/s"
 				else:
 					titre = ""
 

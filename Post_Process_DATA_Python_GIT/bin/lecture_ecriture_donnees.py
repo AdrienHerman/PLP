@@ -83,7 +83,7 @@ def lire_fichier_txt_python(filePath=None):
 				except:
 					print("lire_fichier_txt_python\nLe fichier n'a pas une mise en forme correcte ou ses données ne sont pas au bon format")
 
-					return [], [], [], .0, "", ""
+					return [], [], [], "", "", .0, "", ""
 	
 		else:					# Les données de temps ne sont pas enregistrées
 			try:
@@ -91,17 +91,17 @@ def lire_fichier_txt_python(filePath=None):
 					F.append(float(lignes[i][0]))
 					dep.append(float(lignes[i][1]))
 
-				return F, dep, [], float(lignes[2]), lignes[3].split(',')[0], lignes[3].split(',')[1]
+				return F, dep, [], lignes[3][0], lignes[3][1], float(lignes[2][0].split("\n")[0]), lignes[1][0], lignes[2][0]
 
 			except:
 				print("lire_fichier_txt_python\nLe fichier n'a pas une mise en forme correcte ou ses données ne sont pas au bon format")
 
-				return [], [], [], .0, "", ""
+				return [], [], [], "", "", .0, "", ""
 	
 	except:
 		print("lire_fichier_txt_python\nImpossible de lire le fichier :\n     filePath={0}".format(filePath))
 
-		return [], [], [], .0, "", ""
+		return [], [], [], "", "", .0, "", ""
 
 def lire_en_tete_csv_oscilo(lignes=[]):
 	"""

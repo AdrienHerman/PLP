@@ -55,6 +55,8 @@ def lecture_param(path_config="config.txt"):
 	fact_dep = None
 	taux_augmentation = None
 	nb_pas_avant_augmentation = None
+	calc_vitesse_impact = None
+	nbpts_vitesse_impact = None
 	afficher_dep_tmps = None
 	afficher_F_tmps = None
 	afficher_F_dep = None
@@ -161,6 +163,16 @@ def lecture_param(path_config="config.txt"):
 			except:
 				print("""	lecture_param\nLe type de données entrée dans nb_pas_avant_augmentation n'est pas correct !
 							\n     nb_pas_avant_augmentation={0}""".format(lignes[i][1]))
+		elif lignes[i][0] == "calc_vitesse_impact":
+			if lignes[i][1] == "False":		calc_vitesse_impact = False
+			elif lignes[i][1] == "True":	calc_vitesse_impact = True
+			else:	print("lecture_param\nCommande inconnue pour calc_vitesse_impact")
+		elif lignes[i][0] == "nbpts_vitesse_impact":
+			try:
+				nbpts_vitesse_impact = int(lignes[i][1])
+			except:
+				print("""	lecture_param\nLe type de données entrée dans nbpts_vitesse_impact n'est pas correct !
+							\n     nbpts_vitesse_impact={0}""".format(lignes[i][1]))
 		elif lignes[i][0] == "afficher_dep_tmps":
 			if lignes[i][1] == "False":		afficher_dep_tmps = False
 			elif lignes[i][1] == "True":	afficher_dep_tmps = True
@@ -218,6 +230,10 @@ def lecture_param(path_config="config.txt"):
 		print("lecture_param\nfact_dep est non défini")
 	elif taux_augmentation == None:
 		print("lecture_param\ntaux_augmentation est non défini")
+	elif calc_vitesse_impact == None:
+		print("lecture_param\ncalc_vitesse_impact est non défini")
+	elif nbpts_vitesse_impact == None:
+		print("lecture_param\nnbpts_vitesse_impact est non défini")
 	elif nb_pas_avant_augmentation == None:
 		print("lecture_param\nnb_pas_avant_augmentation est non défini")
 	elif afficher_dep_tmps == None:
@@ -250,6 +266,8 @@ def lecture_param(path_config="config.txt"):
 				fact_dep,
 				taux_augmentation,
 				nb_pas_avant_augmentation,
+				calc_vitesse_impact,
+				nbpts_vitesse_impact,
 				afficher_dep_tmps,
 				afficher_F_tmps,
 				afficher_F_dep,

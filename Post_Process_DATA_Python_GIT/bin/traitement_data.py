@@ -310,3 +310,16 @@ def debut_impact_manuel(F=[], dep=[], tmps=[], tmps_deb_impact=5.0):
 		print("debut_impact_manuel\nLe vecteur temps ne contient pas de temps supérieurs à tmps_deb_impact !\n     tmps_deb_impact = {0}".format(tmps_deb_impact))
 
 	return F, dep, tmps
+
+def calc_vitesse(dep1=None, dep2=None, tmps1=None, tmps2=None):
+	"""
+	Calcul de la vitesse d'impact en fonction de deux points.
+
+	-----------
+	Variables :
+		- dep1, dep2 : Déplacement
+		- tmps1, tmps2 : Temps
+	-----------
+	"""
+
+	return (dep1 - dep2) / (tmps1 - tmps2)
