@@ -12,13 +12,13 @@
 #: ** Si cette option est à True, nom_dossier doit-être renseigné
 #: ** Sinon, nom_fichier doit-être renseigné
 superposer_courbes:True:
-nom_fichier:DATA/STRUCT_2_03.CSV:
+nom_fichier:DATA/STRUCT_06_SA3.CSV:
 nom_dossier:DATA/:
 #:
 #: ** Fichier(s) de données. Le type CSV provient de l'oscilloscope
 #: ** et le type TXT provient de l'enregistrement de ce logiciel.
 #: ** Cette option n'est prise en compte uniquement si superposer_courbes = True
-type_fichier:TXT:
+type_fichier:CSV:
 #:
 #: ** Calculer les données de temps de l'essai
 #: ** True = Oui / False = Non
@@ -30,7 +30,7 @@ calc_temps:True:
 #: ** Sinon vous pouvez renseigner le nom de fichier ci-dessous.
 #: ** ATTENTION : Ne pas mettre .txt à la fin du nom de fichier.
 enregistrer_data:True:
-nom_enregistrement:STRUCT_2_03:
+nom_enregistrement:STRUCT_06_SA3:
 dossier_enregistrement:DATA/:
 #:-----------------------------------
 #:
@@ -51,7 +51,7 @@ sppr_rollback:True:
 #: ** et la variable taux_augmentation doit-être renseignée.
 #: ** Si le début de l'essai est trouvé et qu'il correspond à la position i des vecteurs
 #: ** de données, les données entre 0 et i - nb_pas_avant_augmentation sont supprimées.
-recherche_deb_impact:False:
+recherche_deb_impact:True:
 taux_augmentation:0.9:
 nb_pas_avant_augmentation:1:
 #:
@@ -59,8 +59,8 @@ nb_pas_avant_augmentation:1:
 #: ** commençera à tracer les courbes. tmps_deb_impact doit être exprimé en (ms)
 #: ** ATTENTION : Si recherche_deb_impact = True cette option ne sera pas prise en compte !
 #: ** ATTENTION : Si deb_impact_manuel = True, calc_temps doit être activé !
-deb_impact_manuel:True:
-tmps_deb_impact:500.8:
+deb_impact_manuel:False:
+tmps_deb_impact:481.4:
 #:
 #: ** Le tarrage du vecteur déplacement et du vecteur temps permets d'avoir des graphes
 #: ** qui commencent à 0 ms ou 0 mm. Ces paramètres ne sont valables que si

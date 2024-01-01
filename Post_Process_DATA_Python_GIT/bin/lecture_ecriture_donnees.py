@@ -343,7 +343,7 @@ def liste_fichier_dossier(path="", fileType=".csv"):
 		j = 0
 
 		for i in range(len(files)):
-			if not fileType in files[j].lower():
+			if fileType.split('.')[1] != files[j].lower().split('.')[1]:
 				del files[j]
 
 			else:
