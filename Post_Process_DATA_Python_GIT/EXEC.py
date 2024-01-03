@@ -159,7 +159,7 @@ if not superposer_courbes:	# Si on affiche qu'un seul fichier de données
 					calcul_ok_vimpact = False
 					break
 
-			vitesse_impact = mean(v_pts)
+			vitesse_impact_moyenne = mean(v_pts)
 
 			# Afficher un avertissement si la vitesse d'impact ne peut pas être calculées
 			if not calcul_ok_vimpact:
