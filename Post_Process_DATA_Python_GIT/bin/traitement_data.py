@@ -53,21 +53,6 @@ def suppr_rollback(F=[], dep=[], tmps=[]):
 		
 	return F, dep, tmps
 
-def suppr_saut_force(F, taux_variation=0.05):
-	"""
-	Supprimer les instabilités de mesure de la force.
-
-	-----------
-	Variables :
-		- F : Vecteur force
-		- dep : Vecteur déplacement
-		- tmps : Vecteur temps (ms)
-		- taux_variation :	Critère de variation entre chaque pas pour lisser la courbe
-	-----------
-	"""
-	
-	pass
-
 def recherche_debut_impact(F=[], dep=[], tmps=[], taux_augmentation=0.3, nb_pas_avant_augmentation=1, fileName=""):
 	"""
 	Recherche du début de l'impact
