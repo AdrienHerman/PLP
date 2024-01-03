@@ -10,7 +10,7 @@ from PySide import QtGui
 import FreeCADGui, ImportGui, Part, Sketcher, math, os, sys, time
 
 # Modules du Logiciel
-path_soft = "/home/adrien/Documents/Shadow Drive/INSA 5A/PLP/Python/dev/Generation_Structure_Python_GIT/"
+path_soft = "/home/adrienherman/Documents/Shadow Drive/INSA 5A/PLP/Python/last_stable/Generation Structures Python/"
 sys.path.append(path_soft + "bin/")
 sys.path.append(path_soft + "bin/losange/")
 from lecture_param import *
