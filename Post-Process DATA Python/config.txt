@@ -12,7 +12,7 @@
 #: ** Si cette option est à True, nom_dossier doit-être renseigné
 #: ** Sinon, nom_fichier doit-être renseigné
 superposer_courbes:False:
-nom_fichier:DATA/STRUCT_1_01.CSV:
+nom_fichier:DATA/STRUCT_09_2.CSV:
 nom_dossier:DATA/:
 #:
 #: ** Fichier(s) de données. Le type CSV provient de l'oscilloscope
@@ -30,7 +30,7 @@ calc_temps:True:
 #: ** Sinon vous pouvez renseigner le nom de fichier ci-dessous.
 #: ** ATTENTION : Ne pas mettre .txt à la fin du nom de fichier.
 enregistrer_data:True:
-nom_enregistrement:STRUCT_1_01:
+nom_enregistrement:STRUCT_09_2:
 dossier_enregistrement:DATA/:
 #:-----------------------------------
 #:
@@ -60,7 +60,7 @@ nb_pas_avant_augmentation:1:
 #: ** ATTENTION : Si recherche_deb_impact = True cette option ne sera pas prise en compte !
 #: ** ATTENTION : Si deb_impact_manuel = True, calc_temps doit être activé !
 deb_impact_manuel:False:
-tmps_deb_impact:481.4:
+tmps_deb_impact:200:
 #:
 #: ** Le tarrage du vecteur déplacement et du vecteur temps permets d'avoir des graphes
 #: ** qui commencent à 0 ms ou 0 mm. Ces paramètres ne sont valables que si
@@ -77,6 +77,7 @@ tarrage_tmps:True:
 #: ** ATTENTION : detect_fin_essai ne peut-être activé que lorsque sppr_rollback, recherche_deb_impact
 #: ** et tarrage_dep sont activés !
 detect_fin_essai:True:
+#:dep_max:3.3:
 dep_max:19.73:
 #:
 #: ** Si calculer_energie = True, un calcul de l'énergie (intégration des données
