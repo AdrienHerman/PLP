@@ -43,10 +43,17 @@ seuil_diminution_correction:0.2:
 rho:1.24:
 #:
 #: /// GÉNÉRATION DE STRUCTURES \\\
+#: Structure à base de losanges : No1
 gen_losange_basic:False:
 gen_losange_grad:False:
+#:
+#: Structure à base d'hexagones et de triangles alignés : No2
 gen_hex_tri1_2D_aligne_basic:False:
-gen_hex_tri1_2D_aligne_grad:True:
+gen_hex_tri1_2D_aligne_grad:False:
+#:
+#: Structure à base d'hexagones et de triangles non alignés  : No3
+gen_hex_tri1_2D_naligne_basic:False:
+gen_hex_tri1_2D_naligne_grad:True:
 #:--------------------------------------
 #:
 #:-----------------------------------------
